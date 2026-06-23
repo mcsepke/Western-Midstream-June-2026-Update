@@ -181,7 +181,18 @@
   .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.3rem;margin-bottom:1.2rem}
   .panel h3{font-family:var(--display);font-weight:600;font-size:1rem;margin-bottom:.85rem;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
   .panel h3 .mini{font-family:var(--mono);font-size:.64rem;color:var(--gray);font-weight:400;letter-spacing:.1em}
-  .case{display:flex;gap:.8rem;align-items:flex-start;padding:.7rem 0;border-top:1px solid var(--line)}
+  .case{display:flex;gap:.8rem;align-items:flex-start;padding:.7rem 0;border-top:1px solid var(--line);position:relative}
+  .case[tabindex]{cursor:help;border-radius:8px}
+  .case[tabindex]:hover{background:rgba(255,255,255,.03)}
+  .tipdot{color:var(--teal);font-size:.78rem;margin-left:.3rem;vertical-align:.05em}
+  .tip{position:absolute;top:100%;left:0;margin-top:.45rem;width:min(440px,90vw);z-index:60;
+    background:var(--navy-d);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:12px;
+    padding:.9rem 1.05rem;box-shadow:0 22px 60px -18px rgba(0,0,0,.75);
+    opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .16s,transform .16s,visibility .16s;pointer-events:none}
+  .case:hover .tip,.case:focus .tip,.case:focus-within .tip{opacity:1;visibility:visible;transform:none}
+  .tiph{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:.55rem}
+  .tipr{font-size:.82rem;color:#cfe0f0;margin-top:.5rem;line-height:1.5}
+  .tipr b{display:block;font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:#9fb4c8;font-weight:500;margin-bottom:.12rem}
   .case:first-of-type{border-top:0}
   .badge{font-family:var(--mono);font-size:.66rem;font-weight:600;border-radius:6px;padding:.18rem .5rem;white-space:nowrap}
   .badge.P1{background:rgba(255,86,100,.16);color:var(--red);border:1px solid rgba(255,86,100,.4)}
@@ -324,30 +335,7 @@
   </nav>
 
   <section id="sec-tech" class="mainsec show" role="tabpanel" aria-label="Technical updates">
-  <div class="metrics">
-    <div class="metric"><div class="n">25+</div><div class="l">capabilities shipped across identity, recovery, cloud &amp; core platform</div></div>
-    <div class="metric"><div class="n alt">~75K</div><div class="l">backups scanned for threats in ~60 seconds (Turbo Threat Hunt)</div></div>
-    <div class="metric"><div class="n alt">3</div><div class="l">identity surfaces now covered: Active Directory, Entra ID, Okta</div></div>
-    <div class="metric"><div class="n">≤30 min</div><div class="l">identity threat alert latency (ITDR)</div></div>
-  </div>
-
-  <div class="controls" role="toolbar" aria-label="Filter capabilities by focus area">
-    <button class="tab active" data-f="all">All updates</button>
-    <button class="tab" data-f="identity"><span class="dot"></span>Identity Resilience</button>
-    <button class="tab" data-f="cyber"><span class="dot"></span>Cyber Recovery</button>
-    <button class="tab" data-f="cloud"><span class="dot"></span>Cloud &amp; SaaS</button>
-    <button class="tab" data-f="core"><span class="dot"></span>Core Platform</button>
-    <span class="spacer"></span>
-    <div class="modetoggle" role="group" aria-label="Detail level">
-      <button id="m-over" class="on">Overview</button>
-      <button id="m-tech">Technical detail</button>
-    </div>
-  </div>
-
-  <h2 class="section-h">The year, in order <span>JUN 2025 → JUN 2026</span></h2>
-  <div class="timeline" id="timeline"></div>
-
-  <h2 class="section-h">Where it lands <span>THREE FOCUS AREAS</span></h2>
+  <h2 class="section-h">Where it lands <span>FOUR FOCUS AREAS</span></h2>
   <div class="pillars" id="pillars"></div>
 
   <h2 class="section-h">On the roadmap <span>FORWARD-LOOKING</span></h2>
@@ -405,118 +393,6 @@ const PILLARS = {
   core:{label:"Core Platform", c:"var(--p-core)"}
 };
 
-// Curated, dated RSC updates over the trailing ~12 months, grounded in Rubrik product sources.
-const EVENTS = [
-  {d:"Jun 2025", p:"cloud", t:"M365 Mass Recovery — Teams groups",
-   why:"Bulk-restore whole groups of M365 users at once after a mass incident, instead of one mailbox or site at a time.",
-   tech:"Group-based mass recovery now covers Teams (via Teams Group) alongside Exchange, OneDrive and SharePoint; up to 10K snappables per group, in-place and new-folder options."},
-  {d:"Jun 2025", p:"cyber", t:"Sensitive-data engine unified (Laminar)",
-   why:"Classification of sensitive data now runs on one modern engine across nearly every workload — so 'where is our sensitive data' has a single answer.",
-   tech:"Sensitive Data Monitoring migrated from the legacy Sonar engine to the Laminar engine across all workloads except NAS Cloud Direct."},
-  {d:"Jul 2025", p:"cloud", t:"Cloud database archival expands (RDS PostgreSQL)",
-   why:"Long-term, immutable archival for managed cloud databases — the start of a steady cadence through 2026.",
-   tech:"Exocompute-based archival for Amazon RDS PostgreSQL to S3/RCV; followed by Aurora PostgreSQL (Dec 2025), SQL Server (Feb 2026) and MySQL (Apr 2026)."},
-  {d:"Nov 2025", p:"cloud", t:"NAS Cloud Direct — Azure Files & ANF integration",
-   why:"Petabyte-scale cloud file shares protected with native API integration, far faster than legacy NDMP.",
-   tech:"API-integrated NAS Cloud Direct support for Azure Files (SMB + NFSv4.1) and Azure NetApp Files; ANF also supports SAP HANA storage-snapshot orchestration."},
-  {d:"Dec 2025", p:"cloud", t:"Okta backup & recovery — GA",
-   why:"Your identity provider itself becomes recoverable: users, groups, apps and policies can be restored after accidental or malicious change.",
-   tech:"Backs up Okta Users/Groups/Apps/Policies/UserTypes with dependency-aware restore order and Merge vs Overwrite conflict modes, stored in Rubrik-managed immutable storage. (Passwords/MFA not retrievable — Okta API limit.)"},
-  {d:"Feb 2026", p:"identity", t:"Entra ID Audit Logs in RSC",
-   why:"See changes to your Entra tenant — users, groups, Conditional Access, named locations, roles — in one place inside Rubrik.",
-   tech:"Entra ID audit-log ingestion (>50% of documented logs at GA, expanding); foundation for revert and alerting on identity change."},
-  {d:"Feb 2026", p:"identity", t:"Custom Alerts & Reporting (Active Directory)",
-   why:"The #1 customer-requested capability: get notified the moment a risky identity change happens.",
-   tech:"Custom alerting and reporting on AD activity via email or SIEM; Entra coverage following."},
-  {d:"Feb 2026", p:"identity", t:"Identity inventory: AD Computers + Hybrid Correlation",
-   why:"A clear map of every machine and how AD and Entra identities link — so you act on the real source of truth, not a synced copy.",
-   tech:"AD Computers surfaced with risk violations and group memberships; Hybrid Identity Correlation links the AD primary to its Entra synced object inside the Identity 360 graph."},
-  {d:"Feb 2026", p:"cyber", t:"Bulk Revert Preview",
-   why:"Before undoing attacker changes, see the blast radius of the revert itself — assess impact, then commit.",
-   tech:"Impact assessment runs before a bulk revert is executed, so administrators confirm scope before rolling identities back."},
-  {d:"Mar 2026", p:"identity", t:"Revertible Entra audit-log changes",
-   why:"Don't just detect a malicious identity change — roll it back surgically without a full tenant restore.",
-   tech:"GA revert for Entra audit-log entries: user/group membership, attribute changes, role assignments, and user/group create/delete."},
-  {d:"Mar 2026", p:"identity", t:"AD session events + Entra sign-in logs",
-   why:"Watch account lockouts, disables and password resets as they happen, plus sign-in success/failure and Conditional Access impact.",
-   tech:"AD User Session Change Events (enabled/disabled/locked/password reset) and Entra ID Sign-In Logs with authentication detail and device/location context."},
-  {d:"Mar 2026", p:"identity", t:"Identity Activity Timeline",
-   why:"For any user, group or computer: a single chronological story of what changed and who changed it.",
-   tech:"Per-object activity tab on Users, Groups, Service Principals and Computers showing changes made to and by the object, with the same filters as the main activity log."},
-  {d:"Mar 2026", p:"cyber", t:"Cross-Tenant Recovery for Entra (Phase 1)",
-   why:"Recover identities into a different tenant — useful for clean-room rebuilds after a tenant-level compromise.",
-   tech:"Phase 1 cross-tenant recovery for Entra ID with up to 10 domain mappings; skips existing UPNs. Identity Recovery SKU."},
-  {d:"Mar 2026", p:"identity", t:"Intune device-compliance policy protection",
-   why:"Endpoint-compliance policy — a frequent ransomware target — is now backed up and recoverable.",
-   tech:"Protection for Intune Device Compliance Policies; Identity Recovery SKU."},
-  {d:"Apr 2026", p:"identity", t:"Application Access Graph + Activity Dashboard",
-   why:"See exactly how a user gets access to an app through group membership, and spot spikes in identity activity at a glance.",
-   tech:"Entra Application Access Graph maps user→group→application paths interactively; the Activity Dashboard adds spike detection, top actors and user-lifecycle views."},
-  {d:"Apr 2026", p:"cloud", t:"NAS Cloud Direct in RSC — GA",
-   why:"Cloud-scale file protection managed from the same Rubrik Security Cloud console as everything else.",
-   tech:"NAS Cloud Direct GA inside RSC and default for new customers/sites; brings Anomaly Detection, Threat Monitoring and Threat Hunting to NAS data."},
-  {d:"Apr 2026", p:"cyber", t:"Threat Monitoring & Hunting — current state",
-   why:"Continuously scan recovery points for known threats, then hunt fast across the whole estate when something is suspected.",
-   tech:"Turbo Threat Hunt matches hashes against a pre-computed catalogue (~75K backups/60s); Advanced Threat Hunt adds YARA + file-pattern scanning, multi-cluster, up to 5,000 objects. Intel auto-fed from Rubrik Zero Labs and Mandiant."},
-  {d:"May 2026", p:"cyber", t:"Sensitive data in the recovery workflow (DTA)",
-   why:"During an incident, instantly see which impacted files held sensitive data — connecting ransomware blast radius to data risk.",
-   tech:"Sensitive Data Discovery results embedded in the Data Threat Analytics room per impacted file, with a new Files tab. Enterprise Edition + Sonar."},
-  {d:"May 2026", p:"identity", t:"Okta Identity Resilience",
-   why:"Beyond backup — monitor Okta identity activity and revert changes, the same resilience model now applied to AD and Entra.",
-   tech:"Inventory + activity + revert for Okta (announced May 2026); Okta has no native undo, so Rubrik provides the rollback path."},
-  {d:"May 2026", p:"cyber", t:"Advanced Threat Hunt for cloud (CNP)",
-   why:"Deep, mount-based threat hunting extends to cloud-native workloads, not just on-prem.",
-   tech:"Advanced Threat Hunt support for Cloud Native Protection workloads (rolling out late May 2026); Exocompute required for cloud scans."},
-
-  {d:"2025", p:"core", t:"Proxmox VE protection — GA",
-   why:"Native, agent-light protection for Proxmox VE — useful as organizations diversify their on-prem hypervisor footprint.",
-   tech:"Masterless architecture matching Proxmox's peer-node design; RBS on each node, auto-discovery via the Proxmox API; fleecing-based QEMU backup over NBD. CDM 9.5.1."},
-  {d:"2025", p:"core", t:"KubeVirt / OpenShift Virtualization protection",
-   why:"VMs running on OpenShift are protected with the same policies as the rest of the estate.",
-   tech:"Protects KubeVirt VMs as Kubernetes custom resources; fingerprint-based incremental backup; SLA by namespace type; export + file-level recovery. CDM 9.3+."},
-  {d:"Jan 2026", p:"core", t:"IBM Informix protection — GA",
-   why:"Mission-critical Informix databases get native, application-consistent backup and point-in-time recovery.",
-   tech:"Integrates with IBM's ON-Bar via the Rubrik Informix Storage Manager (packaged in RBS); full + block-level incremental + 15-min-RPO log backup; ~1.5 TB/hr. CDM 9.5.0."},
-  {d:"Apr 2026", p:"core", t:"Rubrik Security Cloud Private — appliance GA",
-   why:"For dark, air-gapped or sovereignty-bound sites, the RSC control plane now runs entirely on-prem on dedicated hardware.",
-   tech:"On-prem RSC control plane on R7404–R7424 appliances (up to 768 GB RAM, 2.4–20M events/day); FE/BE/EE editions; EE Threat Monitoring + Hunting following June 2026."},
-  {d:"May 2026", p:"core", t:"Rubrik Virtual Cluster — Phase 1",
-   why:"Stand up a full Rubrik cluster in software on existing VMware when hardware lead times are long — protect workloads now, move to appliances later.",
-   tech:"Software-only CDM (VR7400 spec, 4–12 nodes) on customer ESXi; existing CDM licensing, no new SKUs; pair with Rubrik Cloud Vault or CCES for immutability in Phase 1."}
-];
-
-const MONTHS={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
-function dkey(s){
-  const parts=s.trim().split(/\s+/);
-  if(parts.length===2){ return parseInt(parts[1])*100 + (MONTHS[parts[0].toLowerCase().slice(0,3)]||6); }
-  return parseInt(parts[0])*100 + 6; // bare year → mid-year
-}
-EVENTS.sort((a,b)=>dkey(a.d)-dkey(b.d));
-
-const tl = document.getElementById('timeline');
-EVENTS.forEach((e,i)=>{
-  const c = PILLARS[e.p].c;
-  const el = document.createElement('div');
-  el.className = 'ev'; el.dataset.p = e.p; el.style.setProperty('--c', c);
-  el.tabIndex = 0; el.setAttribute('role','button'); el.setAttribute('aria-expanded','false');
-  el.innerHTML = `
-    <span class="node"></span>
-    <div class="card">
-      <div class="top">
-        <span class="date">${e.d}</span>
-        <span class="pill">${PILLARS[e.p].label}</span>
-        <span class="chev">▸</span>
-      </div>
-      <div class="title">${e.t}</div>
-      <div class="why">${e.why}</div>
-      <div class="tech"><b>How it works · </b>${e.tech}</div>
-    </div>`;
-  const toggle = ()=>{ el.classList.toggle('open');
-    el.setAttribute('aria-expanded', el.classList.contains('open')); };
-  el.addEventListener('click', toggle);
-  el.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle();}});
-  tl.appendChild(el);
-});
 
 // Pillar summary cards
 const PILLAR_COPY = {
@@ -572,32 +448,9 @@ ROADMAP.forEach(r=>{
   rm.appendChild(el);
 });
 
-// Filtering
-let active='all';
-function applyFilter(f){
-  active=f;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.f===f));
-  document.querySelectorAll('.ev').forEach(ev=>{
-    const match = f==='all' || ev.dataset.p===f;
-    ev.classList.toggle('dim', !match);
-  });
-  document.querySelectorAll('.rcard').forEach(card=>{
-    const match = f==='all' || card.dataset.p===f;
-    card.classList.toggle('dim', !match);
-  });
-  document.querySelectorAll('.pcard').forEach(card=>{
-    card.style.display = (f==='all'||card.dataset.p===f) ? '' : 'none';
-  });
-}
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>applyFilter(t.dataset.f)));
-
-// Detail-level toggle (mixed audience)
-const over=document.getElementById('m-over'), tech=document.getElementById('m-tech');
-over.addEventListener('click',()=>{document.body.classList.remove('tech-on');over.classList.add('on');tech.classList.remove('on');});
-tech.addEventListener('click',()=>{document.body.classList.add('tech-on');tech.classList.add('on');over.classList.remove('on');});
 
 // ===== Account: Support Review + Entitlements =====
-const SUPPORT = {"cem": "Smitha D", "snapshot": "Jun 23, 2026", "openCases": 2, "p1": 1, "jiras": 0, "clusters": 21, "fleetVer": "9.3.3-p4", "usedTotal": 153.3, "cases": [{"num": "708294", "pri": "P1", "subj": "Proactive case \u2014 node reported bad on cluster PDLAPRUBKPV02", "status": "Waiting for customer input", "owner": "Channa Keshava B"}, {"num": "1243655", "pri": "P3", "subj": "Query regarding reclaim of space from source storage", "status": "Waiting for customer input", "owner": "Akshay Haresh"}], "caps": [{"name": "HLLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "4.39 TB", "tb": 4.39, "pct": 83.5}, {"name": "LCLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.50 TB", "tb": 1.5, "pct": 72.5}, {"name": "HALAPRUBKPP01", "plat": "Appliance", "nodes": 8, "used": "120.74 TB", "tb": 120.74, "pct": 71.2}, {"name": "CPLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.71 TB", "tb": 1.71, "pct": 65.7}, {"name": "WBLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.11 TB", "tb": 1.11, "pct": 54.7}, {"name": "RSLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "944.72 GB", "tb": 0.92, "pct": 45.6}, {"name": "DBLAPRUBKPP01", "plat": "Appliance", "nodes": 4, "used": "12.37 TB", "tb": 12.37, "pct": 41.2}, {"name": "HAEDCRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "2.14 TB", "tb": 2.14, "pct": 20.2}, {"name": "LMLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "2.11 TB", "tb": 2.11, "pct": 20.0}, {"name": "RMLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "346.12 GB", "tb": 0.34, "pct": 12.8}, {"name": "CSLAPRUBKPP01", "plat": "Appliance", "nodes": 4, "used": "3.61 TB", "tb": 3.61, "pct": 12.0}, {"name": "HCLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "201.34 GB", "tb": 0.2, "pct": 9.7}, {"name": "PDLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "152.88 GB", "tb": 0.15, "pct": 9.4}, {"name": "GGLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "234.95 GB", "tb": 0.23, "pct": 7.5}, {"name": "BSGLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "603.06 GB", "tb": 0.59, "pct": 5.7}, {"name": "MIDLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "320.87 GB", "tb": 0.31, "pct": 3.0}, {"name": "DBLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "302.64 GB", "tb": 0.3, "pct": 2.9}, {"name": "GILAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "216.97 GB", "tb": 0.21, "pct": 2.1}, {"name": "STLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "197.86 GB", "tb": 0.19, "pct": 1.9}, {"name": "BULAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "183.74 GB", "tb": 0.18, "pct": 1.7}, {"name": "BPLAPRUBKPP01", "plat": "Edge / VMware", "nodes": 1, "used": "None", "tb": 0.0, "pct": null}], "usage": [{"product": "Cloud Data Protection", "lic": "5.00 TB", "con": "88.06 TB", "adopt": 1761.2, "over": true, "term": "1 month, 22 days", "units": "FETB"}, {"product": "E1000", "lic": "12.00 TB", "con": "293.56 GB", "adopt": 2.5, "over": false, "term": "1 year, 7 months, 11 days", "units": "BETB"}, {"product": "Edge", "lic": "120.00 TB", "con": "16.42 TB", "adopt": 13.7, "over": false, "term": "1 year, 8 months, 21 days", "units": "BETB"}, {"product": "M365 Protection", "lic": "80.70 TB", "con": "104.31 TB", "adopt": 129.2, "over": true, "term": "3 months, 9 days", "units": "DPC"}, {"product": "M365 Protection", "lic": "2400.0", "con": "2398.0", "adopt": 99.9, "over": false, "term": "3 months, 9 days", "units": "USERS"}, {"product": "Rubrik Cloud Vault Backup tier Single Zone", "lic": "700.00 TB", "con": "576.80 TB", "adopt": 82.4, "over": false, "term": "3 months, 9 days", "units": "BETB"}, {"product": "Rubrik Appliance", "lic": "600.00 TB", "con": "136.80 TB", "adopt": 22.8, "over": false, "term": "1 year, 7 months, 11 days", "units": "BETB"}]};
+const SUPPORT = {"cem": "Smitha D", "snapshot": "Jun 23, 2026", "openCases": 2, "p1": 1, "jiras": 0, "clusters": 21, "fleetVer": "9.3.3-p4", "usedTotal": 153.3, "cases": [{"num": "708294", "pri": "P1", "subj": "Proactive case \u2014 node reported bad on cluster PDLAPRUBKPV02", "status": "Waiting for customer input", "owner": "Channa Keshava B", "customer": "Western Midstream", "note": {"issue": "Proactive alert that cluster PDLAPRUBKPV02 had a node on low-IOPS storage. The node is currently healthy, but the underlying datastore IOPS are below Rubrik recommendations, so further action is needed on the storage side.", "statusNote": "Waiting for customer input. Support recommended either a storage vMotion to higher-IOPS storage, or snoozing the proactive alerts to avoid repeat noise, and is awaiting customer approval on how to proceed.", "opened": "20 September 2024 \u2014 approximately 641 days old as of 23 June 2026."}}, {"num": "1243655", "pri": "P3", "subj": "Query regarding reclaim of space from source storage", "status": "Waiting for customer input", "owner": "Akshay Haresh", "customer": "Western Midstream", "note": {"issue": "Question on reclaiming space from source storage and a long-running archival job on cluster HLLAPRUBKPV02. Support is validating which deleted Windows volumes are eligible for space reclamation and reviewing archival job progress.", "statusNote": "Waiting for customer input \u2014 specifically the names of the three Windows volume servers/objects removed from backup, so reclaimable space can be confirmed. An update is committed by 24 June 2026, 5 PM MST.", "opened": "18 June 2026 \u2014 approximately 5 days old as of 23 June 2026."}}], "caps": [{"name": "HLLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "4.39 TB", "tb": 4.39, "pct": 83.5}, {"name": "LCLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.50 TB", "tb": 1.5, "pct": 72.5}, {"name": "HALAPRUBKPP01", "plat": "Appliance", "nodes": 8, "used": "120.74 TB", "tb": 120.74, "pct": 71.2}, {"name": "CPLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.71 TB", "tb": 1.71, "pct": 65.7}, {"name": "WBLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.11 TB", "tb": 1.11, "pct": 54.7}, {"name": "RSLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "944.72 GB", "tb": 0.92, "pct": 45.6}, {"name": "DBLAPRUBKPP01", "plat": "Appliance", "nodes": 4, "used": "12.37 TB", "tb": 12.37, "pct": 41.2}, {"name": "HAEDCRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "2.14 TB", "tb": 2.14, "pct": 20.2}, {"name": "LMLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "2.11 TB", "tb": 2.11, "pct": 20.0}, {"name": "RMLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "346.12 GB", "tb": 0.34, "pct": 12.8}, {"name": "CSLAPRUBKPP01", "plat": "Appliance", "nodes": 4, "used": "3.61 TB", "tb": 3.61, "pct": 12.0}, {"name": "HCLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "201.34 GB", "tb": 0.2, "pct": 9.7}, {"name": "PDLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "152.88 GB", "tb": 0.15, "pct": 9.4}, {"name": "GGLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "234.95 GB", "tb": 0.23, "pct": 7.5}, {"name": "BSGLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "603.06 GB", "tb": 0.59, "pct": 5.7}, {"name": "MIDLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "320.87 GB", "tb": 0.31, "pct": 3.0}, {"name": "DBLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "302.64 GB", "tb": 0.3, "pct": 2.9}, {"name": "GILAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "216.97 GB", "tb": 0.21, "pct": 2.1}, {"name": "STLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "197.86 GB", "tb": 0.19, "pct": 1.9}, {"name": "BULAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "183.74 GB", "tb": 0.18, "pct": 1.7}, {"name": "BPLAPRUBKPP01", "plat": "Edge / VMware", "nodes": 1, "used": "None", "tb": 0.0, "pct": null}], "usage": [{"product": "Cloud Data Protection", "lic": "5.00 TB", "con": "88.06 TB", "adopt": 1761.2, "over": true, "term": "1 month, 22 days", "units": "FETB"}, {"product": "E1000", "lic": "12.00 TB", "con": "293.56 GB", "adopt": 2.5, "over": false, "term": "1 year, 7 months, 11 days", "units": "BETB"}, {"product": "Edge", "lic": "120.00 TB", "con": "16.42 TB", "adopt": 13.7, "over": false, "term": "1 year, 8 months, 21 days", "units": "BETB"}, {"product": "M365 Protection", "lic": "80.70 TB", "con": "104.31 TB", "adopt": 129.2, "over": true, "term": "3 months, 9 days", "units": "DPC"}, {"product": "M365 Protection", "lic": "2400.0", "con": "2398.0", "adopt": 99.9, "over": false, "term": "3 months, 9 days", "units": "USERS"}, {"product": "Rubrik Cloud Vault Backup tier Single Zone", "lic": "700.00 TB", "con": "576.80 TB", "adopt": 82.4, "over": false, "term": "3 months, 9 days", "units": "BETB"}, {"product": "Rubrik Appliance", "lic": "600.00 TB", "con": "136.80 TB", "adopt": 22.8, "over": false, "term": "1 year, 7 months, 11 days", "units": "BETB"}]};
 const ENT = [{"fam": "Hardware Support", "pillar": "core", "total": "15 appliances", "skus": 15, "next": "Jul 2026", "items": [{"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jul 28, 2026", "asset": "RH-6410S-01"}, {"desc": "Support for R6000S-3 hardware", "sku": "RS-HW-SVC-PE-S3", "qty": 1, "unit": "appliances", "end": "Jul 28, 2026", "asset": "RH-6412S-01"}, {"desc": "Support for Rubrik hardware", "sku": "RS-HW-SVC-PE-E1", "qty": 1, "unit": "appliances", "end": "Jul 28, 2026", "asset": "RH-E1112S"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 22, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Oct 19, 2026", "asset": "RHA-6408S-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-6410S-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-6404S-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-6404S-01"}, {"desc": "Support for Rubrik hardware", "sku": "RS-HW-SVC-PE-E1", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-E1112S"}]}, {"fam": "Legacy Rubrik Go", "pillar": "core", "total": "7 subs", "skus": 7, "next": "Sep 2026", "items": [{"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 22, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}]}, {"fam": "Edge Foundation Edition", "pillar": "core", "total": "120 BETB", "skus": 4, "next": "Oct 2026", "items": [{"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 50, "unit": "BETB", "end": "Oct 15, 2026", "asset": null}, {"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 50, "unit": "BETB", "end": "Mar 28, 2027", "asset": null}, {"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 10, "unit": "BETB", "end": "Apr 18, 2027", "asset": null}, {"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 10, "unit": "BETB", "end": "Mar 10, 2028", "asset": null}]}, {"fam": "Business Edition", "pillar": "core", "total": "120 BETB", "skus": 2, "next": "Oct 2026", "items": [{"desc": "Rubrik Business Edition", "sku": "RS-BT-BE-PE-PP", "qty": 60, "unit": "BETB", "end": "Oct 19, 2026", "asset": null}, {"desc": "Rubrik Business Edition", "sku": "RS-BT-BE-PE-PP", "qty": 60, "unit": "BETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "Cloud Vault (Backup Tier)", "pillar": "cloud", "total": "700 BETB", "skus": 2, "next": "Jul 2026", "items": [{"desc": "Rubrik Cloud Vault in Azure and AWS - Backup Tier Sing\u2026", "sku": "RS-BT-CVB-PE-PP", "qty": 100, "unit": "BETB", "end": "Jul 31, 2026", "asset": null}, {"desc": "Rubrik Cloud Vault in Azure and AWS - Backup Tier Sing\u2026", "sku": "RS-BT-CVB-PE-PP", "qty": 600, "unit": "BETB", "end": "Sep 30, 2026", "asset": null}]}, {"fam": "Foundation Edition \u00b7 E1000 ROBO", "pillar": "core", "total": "24 BETB", "skus": 2, "next": "Jul 2026", "items": [{"desc": "Rubrik for Remote and Branch Office Appliance", "sku": "RS-BT-FE-E1K-PE-PP", "qty": 12, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}, {"desc": "Rubrik for Remote and Branch Office Appliance", "sku": "RS-BT-FE-E1K-PE-PP", "qty": 12, "unit": "BETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "M365 Data Security (EE)", "pillar": "cloud", "total": "2,400 M365 users", "skus": 2, "next": "Sep 2026", "items": [{"desc": "One (1) month of Rubrik Data Security as a Service Ent\u2026", "sku": "RS-UR-EE-MD-PE-PP", "qty": 1310, "unit": "M365 users", "end": "Sep 30, 2026", "asset": null}, {"desc": "One (1) month of Rubrik Data Security as a Service Ent\u2026", "sku": "RS-UR-EE-MD-PE-PP", "qty": 1090, "unit": "M365 users", "end": "Sep 30, 2026", "asset": null}]}, {"fam": "Ransomware Investigation", "pillar": "cyber", "total": "165 BETB + 12 FETB", "skus": 2, "next": "Jul 2026", "items": [{"desc": "Rubrik Ransomware Investigation", "sku": "RS-BT-RAD-PE-PP", "qty": 165, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}, {"desc": "Rubrik Ransomware Investigation", "sku": "RS-FT-RAD-PE-PP", "qty": 12, "unit": "FETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "Cloud Edition", "pillar": "cloud", "total": "10 BETB", "skus": 1, "next": "Jul 2026", "items": [{"desc": "Rubrik Cloud Edition", "sku": "RS-BT-CLE-PE-PP", "qty": 10, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}]}, {"fam": "Enterprise Edition", "pillar": "cyber", "total": "75 BETB", "skus": 1, "next": "Jan 2028", "items": [{"desc": "Rubrik Enterprise Edition", "sku": "RS-BT-EE-PE-PP", "qty": 75, "unit": "BETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "Enterprise Edition Add-on", "pillar": "cyber", "total": "165 license", "skus": 1, "next": "Aug 2026", "items": [{"desc": "Enterprise Edition Add-on for Foundation", "sku": "RS-BT-FUE-PE-PP", "qty": 165, "unit": "license", "end": "Aug 14, 2026", "asset": null}]}, {"fam": "Foundation Edition", "pillar": "core", "total": "165 BETB", "skus": 1, "next": "Jul 2026", "items": [{"desc": "Rubrik Foundation Edition", "sku": "RS-BT-FE-PE-PP", "qty": 165, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}]}, {"fam": "SAP HANA (Cloud)", "pillar": "core", "total": "5 FETB", "skus": 1, "next": "Aug 2026", "items": [{"desc": "Rubrik for SAP HANA - Cloud", "sku": "RS-FT-SPH-PE-PP", "qty": 5, "unit": "FETB", "end": "Aug 14, 2026", "asset": null}]}];
 const WAVES = [{"label": "Fall 2026", "window": "Jul \u2013 Oct 2026", "items": 30, "tone": "hot", "dates": ["Jul 28", "Jul 31", "Aug 14", "Sep 22", "Sep 25", "Sep 30", "Oct 15", "Oct 19"], "summary": "The bulk of the estate renews here \u2014 ~1,160 BETB of capacity editions, 2,400 M365 users and 700 BETB of Cloud Vault, plus 13 legacy hardware-support and Rubrik Go lines on the older R6408.", "highlights": ["Foundation 165 BETB + EE Add-on 165 (Jul\u2013Aug)", "Cloud Vault 700 BETB (Jul + Sep)", "M365 Data Security 2,400 users (Sep)", "Business 60 BETB + Edge 50 BETB (Oct)"]}, {"label": "2027", "window": "Mar \u2013 Apr 2027", "items": 2, "tone": "warm", "dates": ["Mar 28", "Apr 18"], "summary": "A small Edge follow-on wave \u2014 60 BETB of Edge Foundation Edition across two lines.", "highlights": ["Edge Foundation Edition 50 BETB (Mar)", "Edge Foundation Edition 10 BETB (Apr)"]}, {"label": "2028", "window": "Jan \u2013 Mar 2028", "items": 9, "tone": "cool", "dates": ["Jan 30", "Mar 10"], "summary": "The newer multi-year block \u2014 Enterprise Edition, Business Edition, ROBO and Ransomware Investigation, plus four hardware-support lines.", "highlights": ["Enterprise 75 BETB + Business 60 BETB", "E1000 ROBO 12 BETB + Ransomware Inv 12 FETB", "Edge 10 BETB (Mar) + 4 hardware-support lines"]}];
 const WC={hot:'var(--red)',warm:'var(--yellow)',cool:'var(--cyan)'};
@@ -612,7 +465,7 @@ const akpis=[
 ];
 document.getElementById('akpis').innerHTML=akpis.map(k=>`<div class="akpi"><div class="n ${k.cls}">${k.n}</div><div class="l">${k.l}</div></div>`).join('');
 document.getElementById('case-mini').textContent='CEM owner: '+SUPPORT.cem;
-document.getElementById('cases').innerHTML=SUPPORT.cases.map(c=>`<div class="case"><span class="badge ${c.pri}">${c.pri}</span><div class="body"><div class="subj">${c.subj}</div><div class="meta">Case ${c.num} · ${c.status} · ${c.owner}</div></div></div>`).join('');
+document.getElementById('cases').innerHTML=SUPPORT.cases.map(c=>`<div class="case"${c.note?' tabindex="0" aria-label="Case '+c.num+' details"':''}><span class="badge ${c.pri}">${c.pri}</span><div class="body"><div class="subj">${c.subj}${c.note?' <span class="tipdot" aria-hidden="true">&#9432;</span>':''}</div><div class="meta">Case ${c.num} · ${c.status} · ${c.owner}</div>${c.note?`<div class="tip" role="tooltip"><div class="tiph">Case ${c.num} · ${c.customer||'Western Midstream'}</div><div class="tipr"><b>Issue</b>${c.note.issue}</div><div class="tipr"><b>Current status</b>${c.note.statusNote}</div><div class="tipr"><b>Opened</b>${c.note.opened}</div></div>`:''}</div></div>`).join('');
 
 function band(p){return p>=80?'bad':p>=70?'warn':''}
 const capsAll=SUPPORT.caps.filter(c=>c.pct!=null);
