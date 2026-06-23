@@ -248,6 +248,30 @@
     .eitem .ee{display:none}
   }
 
+  /* ---------- LAUNCH ALERT ARCHIVE ---------- */
+  .alertbar{display:flex;flex-wrap:wrap;gap:.45rem;margin:.1rem 0 1rem;align-items:center}
+  .achip{font-family:var(--mono);font-size:.72rem;color:#c4d4e4;background:rgba(255,255,255,.05);border:1px solid var(--line);
+    border-radius:999px;padding:.4rem .8rem;cursor:pointer;transition:.15s;display:inline-flex;gap:.4rem;align-items:center}
+  .achip:hover{border-color:var(--teal);color:#fff}
+  .achip.active{background:rgba(77,210,210,.14);border-color:var(--teal);color:#fff}
+  .achip .ac{font-size:.66rem;opacity:.65}
+  .alertlist{max-height:520px;overflow-y:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+  .arow{display:grid;grid-template-columns:118px 1fr auto;gap:.85rem;align-items:center;padding:.6rem .95rem;border-top:1px solid rgba(255,255,255,.05)}
+  .arow:first-child{border-top:0}
+  .arow.hide{display:none}
+  .atype{font-family:var(--mono);font-size:.57rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;
+    border-radius:6px;padding:.2rem .45rem;text-align:center}
+  .atype.ann{background:rgba(47,202,255,.13);color:var(--cyan);border:1px solid rgba(47,202,255,.35)}
+  .atype.ga{background:rgba(33,221,170,.13);color:var(--green);border:1px solid rgba(33,221,170,.35)}
+  .atype.prod{background:rgba(255,190,73,.13);color:var(--yellow);border:1px solid rgba(255,190,73,.35)}
+  .atype.launch{background:rgba(130,71,221,.16);color:var(--purple-t);border:1px solid rgba(130,71,221,.4)}
+  .atitle{font-size:.86rem;color:#dceaf6;line-height:1.4}
+  .adate{font-family:var(--mono);font-size:.7rem;color:var(--gray);white-space:nowrap;text-align:right}
+  @media(max-width:620px){
+    .arow{grid-template-columns:104px 1fr;gap:.5rem}
+    .adate{grid-column:2;text-align:left;color:#8fa3b6}
+  }
+
   @media(max-width:760px){
     .metrics{grid-template-columns:repeat(2,1fr)}
     .pillars{grid-template-columns:1fr}
@@ -329,14 +353,19 @@
   </header>
 
   <nav class="mainnav" role="tablist" aria-label="Dashboard sections">
-    <button class="navbtn active" data-sec="tech" role="tab" aria-selected="true"><span class="ico">01</span>Technical updates</button>
-    <button class="navbtn" data-sec="support" role="tab" aria-selected="false"><span class="ico">02</span>Support review</button>
-    <button class="navbtn" data-sec="ent" role="tab" aria-selected="false"><span class="ico">03</span>Licenses &amp; renewals</button>
+    <button class="navbtn active" data-sec="support" role="tab" aria-selected="true"><span class="ico">01</span>Support review</button>
+    <button class="navbtn" data-sec="ent" role="tab" aria-selected="false"><span class="ico">02</span>Licenses &amp; renewals</button>
+    <button class="navbtn" data-sec="tech" role="tab" aria-selected="false"><span class="ico">03</span>Technical updates</button>
   </nav>
 
-  <section id="sec-tech" class="mainsec show" role="tabpanel" aria-label="Technical updates">
+  <section id="sec-tech" class="mainsec" role="tabpanel" aria-label="Technical updates">
   <h2 class="section-h">Where it lands <span>FOUR FOCUS AREAS</span></h2>
   <div class="pillars" id="pillars"></div>
+
+  <h2 class="section-h">Launch alert archive <span>RUBRIK MARKETING &middot; 2024&ndash;2026</span></h2>
+  <p class="sub" style="margin:0 0 1rem">Rubrik Marketing's running archive of Announcement, GA, and Product alerts &mdash; the launches Marketing has supported (not every product update; the release notes hold the complete list). Filter by type, newest first.</p>
+  <div class="alertbar" id="alertbar"></div>
+  <div class="alertlist" id="alertlist"></div>
 
   <h2 class="section-h">On the roadmap <span>FORWARD-LOOKING</span></h2>
   <div class="safeharbor">
@@ -357,7 +386,7 @@
   </div>
   </section>
 
-  <section id="sec-support" class="mainsec" role="tabpanel" aria-label="Support review">
+  <section id="sec-support" class="mainsec show" role="tabpanel" aria-label="Support review">
   <h2 class="section-h">Support review <span>SNAPSHOT · JUN 23 2026</span></h2>
   <div class="akpis" id="akpis"></div>
   <div class="panel"><h3>Open support cases <span class="mini" id="case-mini"></span></h3><div id="cases"></div></div>
@@ -417,6 +446,26 @@ Object.entries(PILLAR_COPY).forEach(([k,v])=>{
     <ul>${v.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
   pc.appendChild(d);
 });
+
+// Launch alert archive (from Rubrik Marketing Launch Alerts list; internal-only entries excluded)
+const ALERTS = [{"t": "ann", "n": "Rubrik Announces Rubrik Security Cloud Sovereign", "d": "1/16/2026"}, {"t": "ga", "n": "Threat Monitoring and Turbo Threat Hunting for NAS Cloud Direct", "d": "1/9/2026"}, {"t": "ga", "n": "Pure FlashArray API Integration for NAS Cloud Direct", "d": "12/17/2025"}, {"t": "ga", "n": "Rubrik DevOps Protection for Azure DevOps is Now GA", "d": "12/15/2025"}, {"t": "ga", "n": "Rubrik and Pure Storage Cyber Visibility Integration", "d": "12/15/2025"}, {"t": "ga", "n": "Enhancements to DynamoDB & Terraform-Compatible Snapshots", "d": "11/25/2025"}, {"t": "ga", "n": "Rubrik Cloud Vault (RCV) on Google Cloud (CNP Workloads Only)", "d": "11/25/2025"}, {"t": "ann", "n": "Introducing Rubrik DevOps Protection", "d": "11/18/2025"}, {"t": "ga", "n": "TCO & Performance Enhancements for Google Cloud Protection", "d": "10/30/2025"}, {"t": "ga", "n": "RBS Network Throttling", "d": "10/30/2025"}, {"t": "ga", "n": "Static Retention for Cloud-Native Protection (CNP)", "d": "10/1/2025"}, {"t": "ga", "n": "RSC UI-Based Automated Recovery for PostgreSQL Databases", "d": "9/30/2025"}, {"t": "ann", "n": "RCV Single Zone on AWS Now Available for the Backup Tier!", "d": "9/15/2025"}, {"t": "ga", "n": "RSC UI-based automated recovery for SAP HANA", "d": "9/9/2025"}, {"t": "ann", "n": "Introducing Orchestrated Cyber Recovery for AWS EC2", "d": "9/5/2025"}, {"t": "ann", "n": "Rubrik Cloud Vault on Google Cloud", "d": "8/29/2025"}, {"t": "ga", "n": "MS SQL Multi-DC AG Support and Multi-Node Backup and Restore", "d": "8/20/2025"}, {"t": "ann", "n": "Introducing Agent Rewind: Resilience When AI Goes Awry", "d": "8/12/2025"}, {"t": "ga", "n": "Identity Resilience", "d": "7/31/2025"}, {"t": "ga", "n": "DynamoDB & Enhanced RDS", "d": "7/30/2025"}, {"t": "ga", "n": "AWS IAM Role Changing", "d": "7/30/2025"}, {"t": "ga", "n": "AWS Simplified Account Management Using AWS Organizations", "d": "7/30/2025"}, {"t": "ann", "n": "Amazon DynamoDB and Enhanced Amazon RDS Protection", "d": "7/15/2025"}, {"t": "ann", "n": "Rubrik Named a Leader in Gartner Magic for 6th Consecutive Year", "d": "6/30/2025"}, {"t": "ann", "n": "Orchestrated Recovery for Azure VM", "d": "6/24/2025"}, {"t": "ga", "n": "MongoDB Enterprise Advanced Deployments with Ops Manager", "d": "6/24/2025"}, {"t": "ann", "n": "New Cyber Resilience Visibility Integration with Pure Storage", "d": "6/18/2025"}, {"t": "ann", "n": "Rubrik for MySQL and OpenStack", "d": "June 2025"}, {"t": "ann", "n": "Your New Secret Weapon Just Dropped @ Rubrik Forward", "d": "6/4/2025"}, {"t": "ga", "n": "Azure CNP - Exocompute - Private Model & Granular RBAC", "d": "5/30/2025"}, {"t": "ga", "n": "Data Discovery and Classification for Oracle Databases", "d": "5/28/2025"}, {"t": "ga", "n": "Enhanced Google Cloud Protection from Rubrik", "d": "5/12/2025"}, {"t": "ga", "n": "What's New in Rubrik Data Threat Analytics", "d": "4/21/2025"}, {"t": "ga", "n": "RBAC & Multi-File Restore for Unstructured Data", "d": "4/21/2025"}, {"t": "ga", "n": "Rubrik Support for EnterpriseDB (EDB)", "d": "4/17/2025"}, {"t": "ann", "n": "Rubrik Introduces new Cyber Resilience Solution with Google Cloud", "d": "4/9/2025"}, {"t": "ga", "n": "Massive Scale and Speed for S3 Data Protection", "d": "4/4/2025"}, {"t": "ga", "n": "Rubrik Cloud Vault on AWS", "d": "4/3/2025"}, {"t": "ga", "n": "IBM Db2 on Windows", "d": "4/2/2025"}, {"t": "ann", "n": "Expanding Cloud Protection to Oracle Cloud Infrastructure (OCI)", "d": "4/1/2025"}, {"t": "prod", "n": "End of Support for Kubernetes Protection v1", "d": "March 2025"}, {"t": "ann", "n": "Microsoft Dynamics 365 CRM Protection", "d": "3/27/2025"}, {"t": "ga", "n": "Expanded Storage Tier Support for Azure VMs & Cross-Region Archival for RCV in Azure", "d": "3/19/2025"}, {"t": "ga", "n": "Multiple Archive Locations for AWS and Azure Cloud Native Workloads", "d": "3/18/2025"}, {"t": "ga", "n": "Salesforce Sandbox Seeding", "d": "3/17/2025"}, {"t": "ann", "n": "Cyber Resilience Product Announcements", "d": "3/4/2025"}, {"t": "ann", "n": "The Rubrik and Pure Storage Architecture for Unstructured Data", "d": "3/3/2025"}, {"t": "ga", "n": "Optimized Snapshot Retention for CNP - Azure (Formerly Smart Diff)", "d": "2/26/2025"}, {"t": "ga", "n": "Rubrik Support for OpenShift Virtualization", "d": "2/5/2025"}, {"t": "ga", "n": "Disaster Recovery for Nutanix", "d": "2/5/2025"}, {"t": "ann", "n": "DSPM now Unified in Rubrik Security Cloud", "d": "2/4/2025"}, {"t": "ga", "n": "Retention Lock for Cloud Native Protection is Now Generally Available", "d": "2/3/2025"}, {"t": "ga", "n": "New NAS Cloud Direct Features Now Generally Available", "d": "1/30/2025"}, {"t": "prod", "n": "Customer-Hosted Exocompute for Cloud Native Workloads", "d": "1/24/2024"}, {"t": "ga", "n": "Rubrik Healthcare Dashboard", "d": "12/17/2024"}, {"t": "ann", "n": "Azure Key Vault and Key Rotation for RCV", "d": "12/11/2024"}, {"t": "ga", "n": "Identity Recovery Now GA", "d": "12/9/2024"}, {"t": "ann", "n": "Rubrik Cloud Vault on AWS", "d": "12/4/2024"}, {"t": "ga", "n": "Azure Files API Support for NAS Cloud Direct", "d": "11/27/2024"}, {"t": "ann", "n": "Rubrik DSPM for M365 Copilot", "d": "11/18/2024"}, {"t": "ann", "n": "Rubrik Support for OpenShift Virtualization", "d": "11/14/2024"}, {"t": "ga", "n": "Rubrik Integration for Microsoft 365 Backup Storage", "d": "11/4/2024"}, {"t": "ga", "n": "Nutanix Files Storage Support for NAS Cloud Direct", "d": "10/24/2024"}, {"t": "ga", "n": "Rubrik Support for PostgreSQL Databases", "d": "10/22/2024"}, {"t": "ga", "n": "Multi-Region Redundancy for Rubrik Cloud Vault", "d": "10/21/2024"}, {"t": "ann", "n": "Healthcare Dashboard for Epic - Coming Soon!", "d": "9/12/2024"}, {"t": "launch", "n": "Ruby Launch Release", "d": ""}];
+const ATYPE={ann:'Announcement',ga:'GA',prod:'Product',launch:'Launch'};
+(function(){
+  var counts={all:ALERTS.length,ann:0,ga:0,prod:0,launch:0};
+  ALERTS.forEach(function(a){counts[a.t]++;});
+  var defs=[['all','All'],['ann','Announcement'],['ga','GA'],['prod','Product']];
+  if(counts.launch) defs.push(['launch','Launch']);
+  var bar=document.getElementById('alertbar');
+  bar.innerHTML=defs.map(function(c,i){return '<button class="achip'+(i===0?' active':'')+'" data-at="'+c[0]+'">'+c[1]+' <span class="ac">'+counts[c[0]]+'</span></button>';}).join('');
+  var list=document.getElementById('alertlist');
+  list.innerHTML=ALERTS.map(function(a){return '<div class="arow" data-at="'+a.t+'"><span class="atype '+a.t+'">'+ATYPE[a.t]+'</span><span class="atitle">'+a.n+'</span><span class="adate">'+(a.d||'\u2014')+'</span></div>';}).join('');
+  bar.querySelectorAll('.achip').forEach(function(ch){ch.addEventListener('click',function(){
+    var f=ch.dataset.at;
+    bar.querySelectorAll('.achip').forEach(function(x){x.classList.toggle('active',x===ch);});
+    list.querySelectorAll('.arow').forEach(function(r){r.classList.toggle('hide', !(f==='all'||r.dataset.at===f));});
+    list.scrollTop=0;
+  });});
+})();
 
 // Roadmap — forward-looking items (clearly labeled, not commitments)
 const ROADMAP = [
