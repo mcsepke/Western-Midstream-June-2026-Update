@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rubrik Security Cloud — 12 Months of Progress · Western Midstream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#093565; --navy-d:#072647; --navy-dd:#051d39;
+    --teal:#4DD2D2; --green:#21DDAA; --cyan:#2FCAFF;
+    --purple:#8247DD; --purple-t:#BF95EF; --red:#FF5664; --yellow:#FFBE49;
+    --gray:#A4A9A8; --ink:#EAF2FA;
+    --p-identity:#BF95EF; --p-cyber:#4DD2D2; --p-cloud:#2FCAFF; --p-core:#21DDAA;
+    --line:rgba(77,210,210,.22);
+    --card:rgba(255,255,255,.045);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(130,71,221,.18), transparent 60%),
+      radial-gradient(1000px 500px at -10% 20%, rgba(47,202,255,.12), transparent 55%),
+      var(--navy-dd);
+    color:var(--ink); font-family:var(--body); line-height:1.55;
+    -webkit-font-smoothing:antialiased; padding-bottom:5rem;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 1.5rem}
+  .brandbar{height:5px;width:100%;background:linear-gradient(90deg,var(--teal),var(--cyan) 35%,var(--purple) 68%,var(--green))}
+
+  /* ---------- SECTION NAV ---------- */
+  .mainnav{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;gap:.5rem;
+    background:linear-gradient(var(--navy-dd) 80%,transparent);padding:.9rem 0 1.05rem;margin-bottom:.4rem}
+  .navbtn{font-family:var(--display);font-weight:600;font-size:.92rem;letter-spacing:-.01em;color:#c4d4e4;
+    background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:11px;padding:.62rem 1.05rem;
+    cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:.55rem}
+  .navbtn:hover{border-color:var(--teal);color:#fff}
+  .navbtn.active{background:var(--teal);color:var(--navy-dd);border-color:var(--teal)}
+  .navbtn .ico{font-family:var(--mono);font-size:.66rem;opacity:.7;font-weight:500}
+  .navbtn.active .ico{opacity:.85}
+  .mainsec{display:none}
+  .mainsec.show{display:block;animation:secfade .28s ease}
+  @keyframes secfade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){ .mainsec.show{animation:none} }
+
+  /* ---------- HERO ---------- */
+  header{padding:3.4rem 0 2.2rem}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--teal);margin-bottom:1.1rem}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,3.3rem);line-height:1.04;letter-spacing:-.015em}
+  h1 .accent{color:var(--teal)}
+  .sub{max-width:46rem;margin-top:1rem;color:#cfe0f0;font-size:1.05rem}
+  .for{font-family:var(--mono);font-size:.78rem;color:var(--gray);margin-top:1.3rem;letter-spacing:.04em}
+  .for b{color:var(--green);font-weight:500}
+
+  /* ---------- METRICS ---------- */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2.4rem 0 .5rem}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.15rem}
+  .metric .n{font-family:var(--display);font-weight:700;font-size:1.85rem;letter-spacing:-.02em;color:var(--green)}
+  .metric .n.alt{color:var(--teal)}
+  .metric .l{font-size:.82rem;color:#bcccdc;margin-top:.15rem}
+
+  /* ---------- CONTROLS ---------- */
+  .controls{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;margin:1.8rem 0 .4rem;padding:.2rem 0}
+  .tab{font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;color:#c4d4e4;background:rgba(255,255,255,.05);
+    border:1px solid var(--line);border-radius:999px;padding:.5rem .95rem;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:.5rem}
+  .tab:hover{border-color:var(--teal);color:#fff}
+  .tab .dot{width:9px;height:9px;border-radius:50%;background:var(--gray)}
+  .tab[data-f="identity"] .dot{background:var(--p-identity)}
+  .tab[data-f="cyber"] .dot{background:var(--p-cyber)}
+  .tab[data-f="cloud"] .dot{background:var(--p-cloud)}
+  .tab[data-f="core"] .dot{background:var(--p-core)}
+  .tab.active{background:rgba(77,210,210,.14);border-color:var(--teal);color:#fff}
+  .spacer{flex:1}
+  .modetoggle{font-family:var(--mono);font-size:.72rem;color:var(--gray);display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .modetoggle button{font-family:var(--mono);font-size:.72rem;background:transparent;color:#c4d4e4;border:0;padding:.5rem .85rem;cursor:pointer}
+  .modetoggle button.on{background:var(--teal);color:var(--navy-dd);font-weight:600}
+
+  /* ---------- TIMELINE (signature) ---------- */
+  .section-h{font-family:var(--display);font-weight:600;font-size:1.35rem;letter-spacing:-.01em;margin:2.6rem 0 1.4rem;display:flex;align-items:baseline;gap:.7rem}
+  .section-h span{font-family:var(--mono);font-size:.74rem;color:var(--teal);letter-spacing:.18em}
+  .timeline{position:relative;padding-left:2.6rem}
+  .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--teal),var(--purple) 50%,var(--cyan))}
+  .ev{position:relative;margin-bottom:.7rem;opacity:0;transform:translateY(14px);transition:.5s}
+  .ev.show{opacity:1;transform:none}
+  .ev.dim{opacity:.22;filter:saturate(.3)}
+  .ev .node{position:absolute;left:-2.6rem;top:1.05rem;width:20px;height:20px;border-radius:50%;
+    background:var(--navy-dd);border:2px solid var(--c);box-shadow:0 0 0 4px rgba(9,53,101,.9),0 0 14px -2px var(--c);transition:.2s}
+  .ev .card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--c);border-radius:12px;
+    padding:1rem 1.15rem;cursor:pointer;transition:.18s}
+  .ev .card:hover{background:rgba(255,255,255,.07);border-color:rgba(77,210,210,.45)}
+  .ev .top{display:flex;flex-wrap:wrap;align-items:center;gap:.65rem}
+  .ev .date{font-family:var(--mono);font-size:.72rem;color:var(--c);letter-spacing:.05em;white-space:nowrap}
+  .ev .pill{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;color:#9fb4c8;
+    border:1px solid var(--line);border-radius:999px;padding:.12rem .55rem}
+  .ev .title{font-family:var(--display);font-weight:600;font-size:1.02rem;margin:.4rem 0 0;letter-spacing:-.01em}
+  .ev .why{color:#cfe0f0;font-size:.92rem;margin-top:.4rem}
+  .ev .tech{color:#a8c0d6;font-size:.86rem;margin-top:.55rem;padding-top:.55rem;border-top:1px dashed var(--line);
+    display:none;font-family:var(--body)}
+  .ev .tech b{color:var(--teal);font-weight:600}
+  .ev.open .tech,body.tech-on .ev .tech{display:block}
+  .ev .chev{margin-left:auto;color:var(--gray);font-family:var(--mono);font-size:.8rem;transition:.2s}
+  .ev.open .chev{transform:rotate(90deg);color:var(--teal)}
+
+  /* ---------- PILLAR CARDS ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:1.1rem;margin-top:1rem}
+  .pcard{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--c);border-radius:14px;padding:1.3rem 1.25rem}
+  .pcard h3{font-family:var(--display);font-weight:600;font-size:1.08rem;color:#fff;letter-spacing:-.01em}
+  .pcard .tag{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.16em;color:var(--c);margin-bottom:.5rem}
+  .pcard p{font-size:.9rem;color:#cfe0f0;margin-top:.6rem}
+  .pcard ul{list-style:none;margin-top:.8rem;display:flex;flex-direction:column;gap:.45rem}
+  .pcard li{font-size:.85rem;color:#bcccdc;padding-left:1.1rem;position:relative}
+  .pcard li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--c)}
+
+  /* ---------- ROADMAP ---------- */
+  .safeharbor{background:rgba(255,190,73,.08);border:1px solid rgba(255,190,73,.35);border-radius:12px;
+    padding:.85rem 1.1rem;margin-bottom:1.3rem;font-size:.84rem;color:#f1ddb4;display:flex;gap:.7rem;align-items:flex-start}
+  .safeharbor b{color:var(--yellow);font-weight:600}
+  .roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:1rem}
+  .rcard{position:relative;background:repeating-linear-gradient(135deg,rgba(255,255,255,.03),rgba(255,255,255,.03) 10px,transparent 10px,transparent 20px);
+    border:1px dashed var(--c);border-radius:12px;padding:1.1rem 1.15rem;transition:.18s}
+  .rcard.dim{opacity:.22;filter:saturate(.3)}
+  .rcard .rtop{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-bottom:.5rem}
+  .rcard .planned{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--yellow);border:1px solid rgba(255,190,73,.4);border-radius:999px;padding:.12rem .5rem}
+  .rcard .target{font-family:var(--mono);font-size:.7rem;color:var(--c);letter-spacing:.04em}
+  .rcard .pill{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:#9fb4c8}
+  .rcard h4{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:-.01em;margin-bottom:.4rem}
+  .rcard p{font-size:.87rem;color:#cfe0f0}
+
+  /* ---------- DISCUSSION ---------- */
+  .talk{background:linear-gradient(135deg,rgba(130,71,221,.12),rgba(47,202,255,.08));border:1px solid var(--line);
+    border-radius:16px;padding:1.6rem 1.6rem;margin-top:1rem}
+  .talk h3{font-family:var(--display);font-weight:600;font-size:1.1rem;margin-bottom:.9rem}
+  .talk ol{margin-left:1.1rem;display:flex;flex-direction:column;gap:.55rem}
+  .talk li{font-size:.94rem;color:#dceaf6}
+  .talk li b{color:var(--teal);font-weight:600}
+
+  /* ---------- FOOTER ---------- */
+  footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);color:var(--gray);font-size:.78rem}
+  .recog{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+  .recog span{font-family:var(--mono);font-size:.7rem;color:#bcccdc;border:1px solid var(--line);border-radius:999px;padding:.3rem .7rem}
+  .disc{font-size:.72rem;color:var(--gray);margin-top:.8rem;line-height:1.5}
+
+  /* ---------- ACCOUNT: SUPPORT & ENTITLEMENTS ---------- */
+  .akpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem;margin-bottom:1.4rem}
+  .akpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.85rem .95rem}
+  .akpi .n{font-family:var(--display);font-weight:700;font-size:1.45rem;color:var(--teal);letter-spacing:-.02em}
+  .akpi .n.warn{color:var(--yellow)} .akpi .n.bad{color:var(--red)} .akpi .n.ok{color:var(--green)}
+  .akpi .l{font-size:.73rem;color:#bcccdc;margin-top:.1rem}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.3rem;margin-bottom:1.2rem}
+  .panel h3{font-family:var(--display);font-weight:600;font-size:1rem;margin-bottom:.85rem;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+  .panel h3 .mini{font-family:var(--mono);font-size:.64rem;color:var(--gray);font-weight:400;letter-spacing:.1em}
+  .case{display:flex;gap:.8rem;align-items:flex-start;padding:.7rem 0;border-top:1px solid var(--line)}
+  .case:first-of-type{border-top:0}
+  .badge{font-family:var(--mono);font-size:.66rem;font-weight:600;border-radius:6px;padding:.18rem .5rem;white-space:nowrap}
+  .badge.P1{background:rgba(255,86,100,.16);color:var(--red);border:1px solid rgba(255,86,100,.4)}
+  .badge.P3{background:rgba(255,190,73,.14);color:var(--yellow);border:1px solid rgba(255,190,73,.35)}
+  .case .subj{font-size:.9rem;color:#eaf2fa}
+  .case .meta{font-family:var(--mono);font-size:.7rem;color:var(--gray);margin-top:.2rem}
+  .crow{display:grid;grid-template-columns:1.5fr .9fr 2fr auto;gap:.7rem;align-items:center;padding:.45rem 0;border-top:1px solid var(--line)}
+  .crow:first-of-type{border-top:0}
+  .crow .cn{font-family:var(--mono);font-size:.75rem;color:#dbe7f2}
+  .crow .cp{font-size:.76rem;color:#9fb4c8}
+  .bar{height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:99px;background:var(--green)}
+  .bar > i.warn{background:var(--yellow)} .bar > i.bad{background:var(--red)}
+  .crow .pct{font-family:var(--mono);font-size:.78rem;text-align:right;min-width:44px}
+  .morebtn{font-family:var(--mono);font-size:.72rem;color:var(--teal);background:none;border:0;cursor:pointer;margin-top:.7rem;padding:0}
+  .morebtn:hover{text-decoration:underline}
+  .hidden{display:none}
+  .utable{width:100%;border-collapse:collapse;font-size:.82rem;min-width:520px}
+  .utable th{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--line);font-weight:500}
+  .utable td{padding:.5rem .5rem;border-bottom:1px solid rgba(255,255,255,.05);color:#cfe0f0}
+  .utable td.r{text-align:right;font-family:var(--mono)}
+  .tagover{font-family:var(--mono);font-size:.58rem;color:var(--red);border:1px solid rgba(255,86,100,.4);border-radius:5px;padding:.05rem .35rem;margin-left:.4rem}
+  .waves{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:1.5rem}
+  .wave{border-radius:14px;padding:1.15rem 1.2rem;border:1px solid var(--line);background:var(--card);border-top:3px solid var(--wc)}
+  .wave .wlabel{font-family:var(--display);font-weight:700;font-size:1.3rem;letter-spacing:-.02em;color:var(--wc)}
+  .wave .wwin{font-family:var(--mono);font-size:.7rem;color:var(--gray);letter-spacing:.05em}
+  .wave .witems{font-family:var(--display);font-weight:600;font-size:.9rem;margin:.5rem 0 .55rem;color:#eaf2fa}
+  .wave .wsum{font-size:.83rem;color:#cfe0f0}
+  .wave .wdates{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.7rem}
+  .wave .wdates span{font-family:var(--mono);font-size:.63rem;color:#bcccdc;border:1px solid var(--line);border-radius:6px;padding:.12rem .4rem}
+  .efams{display:flex;flex-direction:column;gap:.55rem}
+  .efam{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--c);border-radius:11px;overflow:hidden;transition:.18s}
+  .efam.dim{opacity:.25;filter:saturate(.3)}
+  .efam .ehead{display:grid;grid-template-columns:1.7fr 1.2fr auto auto;gap:.8rem;align-items:center;padding:.8rem 1.1rem;cursor:pointer}
+  .efam .ehead:hover{background:rgba(255,255,255,.05)}
+  .efam .ename{font-family:var(--display);font-weight:600;font-size:.95rem}
+  .efam .etot{font-family:var(--mono);font-size:.79rem;color:var(--teal)}
+  .efam .emeta{font-family:var(--mono);font-size:.69rem;color:var(--gray);white-space:nowrap}
+  .efam .echev{color:var(--gray);font-family:var(--mono);transition:.2s}
+  .efam.open .echev{transform:rotate(90deg);color:var(--teal)}
+  .efam .edetail{display:none;padding:0 1.1rem 1rem}
+  .efam.open .edetail{display:block}
+  .eitem{display:grid;grid-template-columns:1.9fr auto 1fr;gap:.7rem;align-items:center;padding:.45rem 0;border-top:1px solid var(--line);font-size:.8rem}
+  .eitem .ed{color:#cfe0f0} .eitem .ed small{color:var(--gray);font-family:var(--mono);display:block;font-size:.65rem;margin-top:.1rem}
+  .eitem .eq{font-family:var(--mono);color:#9fb4c8;text-align:right;white-space:nowrap}
+  .eitem .ee{font-family:var(--mono);color:var(--teal);text-align:right;white-space:nowrap}
+  @media(max-width:620px){
+    .crow{grid-template-columns:1fr auto;gap:.35rem}
+    .crow .cp,.crow .bar{display:none}
+    .efam .ehead{grid-template-columns:1fr auto auto}
+    .efam .emeta{display:none}
+    .eitem{grid-template-columns:1fr auto}
+    .eitem .ee{display:none}
+  }
+
+  @media(max-width:760px){
+    .metrics{grid-template-columns:repeat(2,1fr)}
+    .pillars{grid-template-columns:1fr}
+    .controls{position:static}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .ev{transition:none;opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="brandbar"></div>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Rubrik Security Cloud · Lunch &amp; Learn</div>
+    <h1>12 months of <span class="accent">cyber resilience</span>,<br>shipped.</h1>
+    <p class="sub">A guided walk through what Rubrik Security Cloud added over the past year — across the areas that matter most to a critical-infrastructure operator: protecting identity, recovering cleanly from ransomware, extending the same guarantees into cloud and SaaS, and the on-prem core platform underneath it all. A roadmap view at the end shows where things are heading.</p>
+    <div class="for">Prepared for <b>Western Midstream</b> · midstream energy operations · mixed technical &amp; leadership audience</div>
+  </header>
+
+  <nav class="mainnav" role="tablist" aria-label="Dashboard sections">
+    <button class="navbtn active" data-sec="tech" role="tab" aria-selected="true"><span class="ico">01</span>Technical updates</button>
+    <button class="navbtn" data-sec="support" role="tab" aria-selected="false"><span class="ico">02</span>Support review</button>
+    <button class="navbtn" data-sec="ent" role="tab" aria-selected="false"><span class="ico">03</span>Licenses &amp; renewals</button>
+  </nav>
+
+  <section id="sec-tech" class="mainsec show" role="tabpanel" aria-label="Technical updates">
+  <div class="metrics">
+    <div class="metric"><div class="n">25+</div><div class="l">capabilities shipped across identity, recovery, cloud &amp; core platform</div></div>
+    <div class="metric"><div class="n alt">~75K</div><div class="l">backups scanned for threats in ~60 seconds (Turbo Threat Hunt)</div></div>
+    <div class="metric"><div class="n alt">3</div><div class="l">identity surfaces now covered: Active Directory, Entra ID, Okta</div></div>
+    <div class="metric"><div class="n">≤30 min</div><div class="l">identity threat alert latency (ITDR)</div></div>
+  </div>
+
+  <div class="controls" role="toolbar" aria-label="Filter capabilities by focus area">
+    <button class="tab active" data-f="all">All updates</button>
+    <button class="tab" data-f="identity"><span class="dot"></span>Identity Resilience</button>
+    <button class="tab" data-f="cyber"><span class="dot"></span>Cyber Recovery</button>
+    <button class="tab" data-f="cloud"><span class="dot"></span>Cloud &amp; SaaS</button>
+    <button class="tab" data-f="core"><span class="dot"></span>Core Platform</button>
+    <span class="spacer"></span>
+    <div class="modetoggle" role="group" aria-label="Detail level">
+      <button id="m-over" class="on">Overview</button>
+      <button id="m-tech">Technical detail</button>
+    </div>
+  </div>
+
+  <h2 class="section-h">The year, in order <span>JUN 2025 → JUN 2026</span></h2>
+  <div class="timeline" id="timeline"></div>
+
+  <h2 class="section-h">Where it lands <span>THREE FOCUS AREAS</span></h2>
+  <div class="pillars" id="pillars"></div>
+
+  <h2 class="section-h">On the roadmap <span>FORWARD-LOOKING</span></h2>
+  <div class="safeharbor">
+    <span>⚠</span>
+    <div><b>Forward-looking — not a commitment.</b> The items below are planned directions from Rubrik product sources. Features, timing (including any fiscal-quarter targets), and availability can change, and some have no committed external date. Don't treat anything here as a delivery promise; confirm current status before basing a decision on it.</div>
+  </div>
+  <div class="roadmap" id="roadmap"></div>
+
+  <h2 class="section-h">Worth discussing over lunch <span>FOR A MIDSTREAM OPERATOR</span></h2>
+  <div class="talk">
+    <h3>Questions to anchor the conversation</h3>
+    <ol>
+      <li><b>Identity is the new perimeter.</b> If an attacker compromised your Active Directory or Entra tenant tonight, how fast could you see <i>what</i> changed and surgically revert it — without restoring the whole forest?</li>
+      <li><b>Clean recovery, not just recovery.</b> When you fail over after an incident, how do you prove the recovery point itself isn't carrying the malware? (Threat Hunting + Anomaly Detection feed directly into orchestrated, isolated recovery.)</li>
+      <li><b>One pane across on-prem and cloud.</b> As workloads move to Azure, AWS and M365, is your backup and threat coverage following them — or fragmenting into separate tools?</li>
+      <li><b>SaaS identity &amp; data.</b> Okta, Entra and M365 now hold the keys to operations. Are those backed up and revertible the same way your AD forest is?</li>
+    </ol>
+  </div>
+  </section>
+
+  <section id="sec-support" class="mainsec" role="tabpanel" aria-label="Support review">
+  <h2 class="section-h">Support review <span>SNAPSHOT · JUN 23 2026</span></h2>
+  <div class="akpis" id="akpis"></div>
+  <div class="panel"><h3>Open support cases <span class="mini" id="case-mini"></span></h3><div id="cases"></div></div>
+  <div class="panel"><h3>Cluster capacity watch <span class="mini" id="cap-mini"></span></h3><div id="caps"></div></div>
+  <div class="panel"><h3>Licensed vs consumed <span class="mini">FROM PRODUCT USAGE</span></h3><div style="overflow-x:auto"><table class="utable" id="usage"></table></div></div>
+  </section>
+
+  <section id="sec-ent" class="mainsec" role="tabpanel" aria-label="Licenses and renewals">
+  <h2 class="section-h">Entitlements &amp; renewals <span>41 ACTIVE LINES · 12 RENEWAL DATES</span></h2>
+  <p class="sub" style="margin:0 0 1.2rem">Consolidated by renewal wave for the high-level view, then by product family below — expand any family to see its individual lines and exact renewal dates.</p>
+  <div class="waves" id="waves"></div>
+  <h3 style="font-family:var(--display);font-weight:600;font-size:1.05rem;margin:.4rem 0 1rem">By product family <span style="font-family:var(--mono);font-size:.7rem;color:var(--gray);font-weight:400;letter-spacing:.08em">· TAP TO EXPAND</span></h3>
+  <div class="efams" id="efams"></div>
+  </section>
+
+  <footer>
+    <div class="recog">
+      <span>Gartner® MQ Leader — 6 consecutive years</span>
+      <span>Furthest in Completeness of Vision (2025)</span>
+      <span>IDC MarketScape: Cyber Recovery Leader 2025</span>
+    </div>
+    <div>Rubrik Security Cloud · capability timeline current as of June 2026.</div>
+    <p class="disc">Internal enablement reference for a customer session. Dates reflect general-availability or rollout milestones from Rubrik product sources; some capabilities have edition or version prerequisites (e.g. CDM/RSV version, Enterprise Edition, or Identity Resilience SKU). Confirm specifics and any roadmap items against current Rubrik documentation before committing to a customer.</p>
+  </footer>
+
+</div>
+
+<script>
+const PILLARS = {
+  identity:{label:"Identity Resilience", c:"var(--p-identity)"},
+  cyber:{label:"Cyber Recovery", c:"var(--p-cyber)"},
+  cloud:{label:"Cloud & SaaS", c:"var(--p-cloud)"},
+  core:{label:"Core Platform", c:"var(--p-core)"}
+};
+
+// Curated, dated RSC updates over the trailing ~12 months, grounded in Rubrik product sources.
+const EVENTS = [
+  {d:"Jun 2025", p:"cloud", t:"M365 Mass Recovery — Teams groups",
+   why:"Bulk-restore whole groups of M365 users at once after a mass incident, instead of one mailbox or site at a time.",
+   tech:"Group-based mass recovery now covers Teams (via Teams Group) alongside Exchange, OneDrive and SharePoint; up to 10K snappables per group, in-place and new-folder options."},
+  {d:"Jun 2025", p:"cyber", t:"Sensitive-data engine unified (Laminar)",
+   why:"Classification of sensitive data now runs on one modern engine across nearly every workload — so 'where is our sensitive data' has a single answer.",
+   tech:"Sensitive Data Monitoring migrated from the legacy Sonar engine to the Laminar engine across all workloads except NAS Cloud Direct."},
+  {d:"Jul 2025", p:"cloud", t:"Cloud database archival expands (RDS PostgreSQL)",
+   why:"Long-term, immutable archival for managed cloud databases — the start of a steady cadence through 2026.",
+   tech:"Exocompute-based archival for Amazon RDS PostgreSQL to S3/RCV; followed by Aurora PostgreSQL (Dec 2025), SQL Server (Feb 2026) and MySQL (Apr 2026)."},
+  {d:"Nov 2025", p:"cloud", t:"NAS Cloud Direct — Azure Files & ANF integration",
+   why:"Petabyte-scale cloud file shares protected with native API integration, far faster than legacy NDMP.",
+   tech:"API-integrated NAS Cloud Direct support for Azure Files (SMB + NFSv4.1) and Azure NetApp Files; ANF also supports SAP HANA storage-snapshot orchestration."},
+  {d:"Dec 2025", p:"cloud", t:"Okta backup & recovery — GA",
+   why:"Your identity provider itself becomes recoverable: users, groups, apps and policies can be restored after accidental or malicious change.",
+   tech:"Backs up Okta Users/Groups/Apps/Policies/UserTypes with dependency-aware restore order and Merge vs Overwrite conflict modes, stored in Rubrik-managed immutable storage. (Passwords/MFA not retrievable — Okta API limit.)"},
+  {d:"Feb 2026", p:"identity", t:"Entra ID Audit Logs in RSC",
+   why:"See changes to your Entra tenant — users, groups, Conditional Access, named locations, roles — in one place inside Rubrik.",
+   tech:"Entra ID audit-log ingestion (>50% of documented logs at GA, expanding); foundation for revert and alerting on identity change."},
+  {d:"Feb 2026", p:"identity", t:"Custom Alerts & Reporting (Active Directory)",
+   why:"The #1 customer-requested capability: get notified the moment a risky identity change happens.",
+   tech:"Custom alerting and reporting on AD activity via email or SIEM; Entra coverage following."},
+  {d:"Feb 2026", p:"identity", t:"Identity inventory: AD Computers + Hybrid Correlation",
+   why:"A clear map of every machine and how AD and Entra identities link — so you act on the real source of truth, not a synced copy.",
+   tech:"AD Computers surfaced with risk violations and group memberships; Hybrid Identity Correlation links the AD primary to its Entra synced object inside the Identity 360 graph."},
+  {d:"Feb 2026", p:"cyber", t:"Bulk Revert Preview",
+   why:"Before undoing attacker changes, see the blast radius of the revert itself — assess impact, then commit.",
+   tech:"Impact assessment runs before a bulk revert is executed, so administrators confirm scope before rolling identities back."},
+  {d:"Mar 2026", p:"identity", t:"Revertible Entra audit-log changes",
+   why:"Don't just detect a malicious identity change — roll it back surgically without a full tenant restore.",
+   tech:"GA revert for Entra audit-log entries: user/group membership, attribute changes, role assignments, and user/group create/delete."},
+  {d:"Mar 2026", p:"identity", t:"AD session events + Entra sign-in logs",
+   why:"Watch account lockouts, disables and password resets as they happen, plus sign-in success/failure and Conditional Access impact.",
+   tech:"AD User Session Change Events (enabled/disabled/locked/password reset) and Entra ID Sign-In Logs with authentication detail and device/location context."},
+  {d:"Mar 2026", p:"identity", t:"Identity Activity Timeline",
+   why:"For any user, group or computer: a single chronological story of what changed and who changed it.",
+   tech:"Per-object activity tab on Users, Groups, Service Principals and Computers showing changes made to and by the object, with the same filters as the main activity log."},
+  {d:"Mar 2026", p:"cyber", t:"Cross-Tenant Recovery for Entra (Phase 1)",
+   why:"Recover identities into a different tenant — useful for clean-room rebuilds after a tenant-level compromise.",
+   tech:"Phase 1 cross-tenant recovery for Entra ID with up to 10 domain mappings; skips existing UPNs. Identity Recovery SKU."},
+  {d:"Mar 2026", p:"identity", t:"Intune device-compliance policy protection",
+   why:"Endpoint-compliance policy — a frequent ransomware target — is now backed up and recoverable.",
+   tech:"Protection for Intune Device Compliance Policies; Identity Recovery SKU."},
+  {d:"Apr 2026", p:"identity", t:"Application Access Graph + Activity Dashboard",
+   why:"See exactly how a user gets access to an app through group membership, and spot spikes in identity activity at a glance.",
+   tech:"Entra Application Access Graph maps user→group→application paths interactively; the Activity Dashboard adds spike detection, top actors and user-lifecycle views."},
+  {d:"Apr 2026", p:"cloud", t:"NAS Cloud Direct in RSC — GA",
+   why:"Cloud-scale file protection managed from the same Rubrik Security Cloud console as everything else.",
+   tech:"NAS Cloud Direct GA inside RSC and default for new customers/sites; brings Anomaly Detection, Threat Monitoring and Threat Hunting to NAS data."},
+  {d:"Apr 2026", p:"cyber", t:"Threat Monitoring & Hunting — current state",
+   why:"Continuously scan recovery points for known threats, then hunt fast across the whole estate when something is suspected.",
+   tech:"Turbo Threat Hunt matches hashes against a pre-computed catalogue (~75K backups/60s); Advanced Threat Hunt adds YARA + file-pattern scanning, multi-cluster, up to 5,000 objects. Intel auto-fed from Rubrik Zero Labs and Mandiant."},
+  {d:"May 2026", p:"cyber", t:"Sensitive data in the recovery workflow (DTA)",
+   why:"During an incident, instantly see which impacted files held sensitive data — connecting ransomware blast radius to data risk.",
+   tech:"Sensitive Data Discovery results embedded in the Data Threat Analytics room per impacted file, with a new Files tab. Enterprise Edition + Sonar."},
+  {d:"May 2026", p:"identity", t:"Okta Identity Resilience",
+   why:"Beyond backup — monitor Okta identity activity and revert changes, the same resilience model now applied to AD and Entra.",
+   tech:"Inventory + activity + revert for Okta (announced May 2026); Okta has no native undo, so Rubrik provides the rollback path."},
+  {d:"May 2026", p:"cyber", t:"Advanced Threat Hunt for cloud (CNP)",
+   why:"Deep, mount-based threat hunting extends to cloud-native workloads, not just on-prem.",
+   tech:"Advanced Threat Hunt support for Cloud Native Protection workloads (rolling out late May 2026); Exocompute required for cloud scans."},
+
+  {d:"2025", p:"core", t:"Proxmox VE protection — GA",
+   why:"Native, agent-light protection for Proxmox VE — useful as organizations diversify their on-prem hypervisor footprint.",
+   tech:"Masterless architecture matching Proxmox's peer-node design; RBS on each node, auto-discovery via the Proxmox API; fleecing-based QEMU backup over NBD. CDM 9.5.1."},
+  {d:"2025", p:"core", t:"KubeVirt / OpenShift Virtualization protection",
+   why:"VMs running on OpenShift are protected with the same policies as the rest of the estate.",
+   tech:"Protects KubeVirt VMs as Kubernetes custom resources; fingerprint-based incremental backup; SLA by namespace type; export + file-level recovery. CDM 9.3+."},
+  {d:"Jan 2026", p:"core", t:"IBM Informix protection — GA",
+   why:"Mission-critical Informix databases get native, application-consistent backup and point-in-time recovery.",
+   tech:"Integrates with IBM's ON-Bar via the Rubrik Informix Storage Manager (packaged in RBS); full + block-level incremental + 15-min-RPO log backup; ~1.5 TB/hr. CDM 9.5.0."},
+  {d:"Apr 2026", p:"core", t:"Rubrik Security Cloud Private — appliance GA",
+   why:"For dark, air-gapped or sovereignty-bound sites, the RSC control plane now runs entirely on-prem on dedicated hardware.",
+   tech:"On-prem RSC control plane on R7404–R7424 appliances (up to 768 GB RAM, 2.4–20M events/day); FE/BE/EE editions; EE Threat Monitoring + Hunting following June 2026."},
+  {d:"May 2026", p:"core", t:"Rubrik Virtual Cluster — Phase 1",
+   why:"Stand up a full Rubrik cluster in software on existing VMware when hardware lead times are long — protect workloads now, move to appliances later.",
+   tech:"Software-only CDM (VR7400 spec, 4–12 nodes) on customer ESXi; existing CDM licensing, no new SKUs; pair with Rubrik Cloud Vault or CCES for immutability in Phase 1."}
+];
+
+const MONTHS={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+function dkey(s){
+  const parts=s.trim().split(/\s+/);
+  if(parts.length===2){ return parseInt(parts[1])*100 + (MONTHS[parts[0].toLowerCase().slice(0,3)]||6); }
+  return parseInt(parts[0])*100 + 6; // bare year → mid-year
+}
+EVENTS.sort((a,b)=>dkey(a.d)-dkey(b.d));
+
+const tl = document.getElementById('timeline');
+EVENTS.forEach((e,i)=>{
+  const c = PILLARS[e.p].c;
+  const el = document.createElement('div');
+  el.className = 'ev'; el.dataset.p = e.p; el.style.setProperty('--c', c);
+  el.tabIndex = 0; el.setAttribute('role','button'); el.setAttribute('aria-expanded','false');
+  el.innerHTML = `
+    <span class="node"></span>
+    <div class="card">
+      <div class="top">
+        <span class="date">${e.d}</span>
+        <span class="pill">${PILLARS[e.p].label}</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="title">${e.t}</div>
+      <div class="why">${e.why}</div>
+      <div class="tech"><b>How it works · </b>${e.tech}</div>
+    </div>`;
+  const toggle = ()=>{ el.classList.toggle('open');
+    el.setAttribute('aria-expanded', el.classList.contains('open')); };
+  el.addEventListener('click', toggle);
+  el.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle();}});
+  tl.appendChild(el);
+});
+
+// Pillar summary cards
+const PILLAR_COPY = {
+  identity:{tag:"Focus area 01", h:"Identity Resilience",
+    p:"AD, Entra ID and Okta — detect malicious change, see the full activity story, and revert surgically instead of rebuilding the forest.",
+    items:["Activity monitoring across AD, Entra & Okta","Revertible identity changes, not just alerts","ITDR ≤30 min alert latency · ISPM posture policies","Threat intel from Defender for Identity & CrowdStrike"]},
+  cyber:{tag:"Focus area 02", h:"Cyber Recovery",
+    p:"Find threats hiding in backups, prove a recovery point is clean, and fail over into an isolated environment — orchestrated end to end.",
+    items:["Turbo + Advanced Threat Hunting (YARA, hashes, patterns)","Continuous Threat Monitoring with Zero Labs + Mandiant feeds","ML Anomaly Detection incl. VM-level encryption attacks","Orchestrated, isolated clean-room recovery plans"]},
+  cloud:{tag:"Focus area 03", h:"Cloud & SaaS",
+    p:"The same protection and threat coverage extended to Azure, AWS, M365, Okta and Salesforce — managed from one console.",
+    items:["M365 protection with Anomaly Detection + mass recovery","Okta & Entra SaaS identity backup and recovery","Cloud database archival (RDS, Aurora, SQL, MySQL)","Air-gapped Rubrik Cloud Vault as offsite, immutable target"]},
+  core:{tag:"Focus area 04", h:"Core On-Prem Platform",
+    p:"The foundation under everything: a self-healing, immutable data plane on appliances or in software, with the broadest workload coverage on-prem.",
+    items:["Immutable, erasure-coded storage with self-healing","Zero-downtime rolling upgrades (CDM 9.0+)","Quorum Authorization + Retention Lock (Governance/Compliance)","Expanding workloads: Proxmox, OpenShift Virt, Informix, OLVM","RSC Private for dark/air-gapped sites · Virtual Cluster in software"]}
+};
+const pc = document.getElementById('pillars');
+Object.entries(PILLAR_COPY).forEach(([k,v])=>{
+  const d = document.createElement('div');
+  d.className='pcard'; d.dataset.p=k; d.style.setProperty('--c', PILLARS[k].c);
+  d.innerHTML = `<div class="tag">${v.tag}</div><h3>${v.h}</h3><p>${v.p}</p>
+    <ul>${v.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  pc.appendChild(d);
+});
+
+// Roadmap — forward-looking items (clearly labeled, not commitments)
+const ROADMAP = [
+  {p:"core", target:"GA rollout Jul–Aug 2026", t:"Hyper-V Enhanced Network Configuration",
+   why:"Automatically captures each VM's network adapter settings at backup, and adds a Select Network step so NICs map cleanly to the target host during Export or Instant Recovery."},
+  {p:"core", target:"Planned", t:"Nutanix AHV Instant Recovery",
+   why:"Bring AHV VMs back online instantly from a backup, extending the rapid-recovery model already available for other hypervisors."},
+  {p:"core", target:"2H FY27", t:"Virtual Cluster Phase 2 (shared-storage immutability)",
+   why:"Adds immutability via S3-capable shared storage (Pure FlashBlade / NetApp under evaluation) plus Azure Local and KVM support — closing the Phase 1 immutability gap."},
+  {p:"core", target:"In security review · no GA date", t:"End-to-end Pure FlashArray orchestration",
+   why:"Native RSC SLA policy enforcement directly against Pure FlashArray volumes and protection groups, independent of the VMware layer. Deep roadmap — no committed timeline."},
+  {p:"cyber", target:"Planned", t:"KubeVirt Anomaly Detection & Sensitive Data",
+   why:"Threat and sensitive-data analytics extended to OpenShift Virtualization workloads."},
+  {p:"identity", target:"Forthcoming", t:"Orchestrated AD Forest Recovery",
+   why:"Wizard-driven, orchestrated recovery of an entire AD forest to alternate hosts — turning forest rebuilds from a manual runbook into a guided workflow."},
+  {p:"identity", target:"Q2 FY27", t:"Entra Cross-Tenant Recovery — Phase 2",
+   why:"Expands cross-tenant identity recovery beyond the initial Phase 1 scope for clean-room and tenant-migration scenarios."},
+  {p:"identity", target:"Planned", t:"Proactive sign-in anomaly alerts",
+   why:"Out-of-the-box operational alerts on authentication anomalies (e.g. MFA-failure spikes), building on the new Entra sign-in telemetry."}
+];
+const rm = document.getElementById('roadmap');
+ROADMAP.forEach(r=>{
+  const c = PILLARS[r.p].c;
+  const el = document.createElement('div');
+  el.className='rcard'; el.dataset.p=r.p; el.style.setProperty('--c', c);
+  el.innerHTML = `<div class="rtop"><span class="planned">Planned</span>
+    <span class="pill">${PILLARS[r.p].label}</span><span class="target">${r.target}</span></div>
+    <h4>${r.t}</h4><p>${r.why}</p>`;
+  rm.appendChild(el);
+});
+
+// Filtering
+let active='all';
+function applyFilter(f){
+  active=f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.f===f));
+  document.querySelectorAll('.ev').forEach(ev=>{
+    const match = f==='all' || ev.dataset.p===f;
+    ev.classList.toggle('dim', !match);
+  });
+  document.querySelectorAll('.rcard').forEach(card=>{
+    const match = f==='all' || card.dataset.p===f;
+    card.classList.toggle('dim', !match);
+  });
+  document.querySelectorAll('.pcard').forEach(card=>{
+    card.style.display = (f==='all'||card.dataset.p===f) ? '' : 'none';
+  });
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>applyFilter(t.dataset.f)));
+
+// Detail-level toggle (mixed audience)
+const over=document.getElementById('m-over'), tech=document.getElementById('m-tech');
+over.addEventListener('click',()=>{document.body.classList.remove('tech-on');over.classList.add('on');tech.classList.remove('on');});
+tech.addEventListener('click',()=>{document.body.classList.add('tech-on');tech.classList.add('on');over.classList.remove('on');});
+
+// ===== Account: Support Review + Entitlements =====
+const SUPPORT = {"cem": "Smitha D", "snapshot": "Jun 23, 2026", "openCases": 2, "p1": 1, "jiras": 0, "clusters": 21, "fleetVer": "9.3.3-p4", "usedTotal": 153.3, "cases": [{"num": "708294", "pri": "P1", "subj": "Proactive case \u2014 node reported bad on cluster PDLAPRUBKPV02", "status": "Waiting for customer input", "owner": "Channa Keshava B"}, {"num": "1243655", "pri": "P3", "subj": "Query regarding reclaim of space from source storage", "status": "Waiting for customer input", "owner": "Akshay Haresh"}], "caps": [{"name": "HLLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "4.39 TB", "tb": 4.39, "pct": 83.5}, {"name": "LCLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.50 TB", "tb": 1.5, "pct": 72.5}, {"name": "HALAPRUBKPP01", "plat": "Appliance", "nodes": 8, "used": "120.74 TB", "tb": 120.74, "pct": 71.2}, {"name": "CPLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.71 TB", "tb": 1.71, "pct": 65.7}, {"name": "WBLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "1.11 TB", "tb": 1.11, "pct": 54.7}, {"name": "RSLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "944.72 GB", "tb": 0.92, "pct": 45.6}, {"name": "DBLAPRUBKPP01", "plat": "Appliance", "nodes": 4, "used": "12.37 TB", "tb": 12.37, "pct": 41.2}, {"name": "HAEDCRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "2.14 TB", "tb": 2.14, "pct": 20.2}, {"name": "LMLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "2.11 TB", "tb": 2.11, "pct": 20.0}, {"name": "RMLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "346.12 GB", "tb": 0.34, "pct": 12.8}, {"name": "CSLAPRUBKPP01", "plat": "Appliance", "nodes": 4, "used": "3.61 TB", "tb": 3.61, "pct": 12.0}, {"name": "HCLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "201.34 GB", "tb": 0.2, "pct": 9.7}, {"name": "PDLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "152.88 GB", "tb": 0.15, "pct": 9.4}, {"name": "GGLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "234.95 GB", "tb": 0.23, "pct": 7.5}, {"name": "BSGLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "603.06 GB", "tb": 0.59, "pct": 5.7}, {"name": "MIDLAPRUBKPV02", "plat": "Edge / VMware", "nodes": 1, "used": "320.87 GB", "tb": 0.31, "pct": 3.0}, {"name": "DBLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "302.64 GB", "tb": 0.3, "pct": 2.9}, {"name": "GILAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "216.97 GB", "tb": 0.21, "pct": 2.1}, {"name": "STLAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "197.86 GB", "tb": 0.19, "pct": 1.9}, {"name": "BULAPRUBKPV01", "plat": "Edge / VMware", "nodes": 1, "used": "183.74 GB", "tb": 0.18, "pct": 1.7}, {"name": "BPLAPRUBKPP01", "plat": "Edge / VMware", "nodes": 1, "used": "None", "tb": 0.0, "pct": null}], "usage": [{"product": "Cloud Data Protection", "lic": "5.00 TB", "con": "88.06 TB", "adopt": 1761.2, "over": true, "term": "1 month, 22 days", "units": "FETB"}, {"product": "E1000", "lic": "12.00 TB", "con": "293.56 GB", "adopt": 2.5, "over": false, "term": "1 year, 7 months, 11 days", "units": "BETB"}, {"product": "Edge", "lic": "120.00 TB", "con": "16.42 TB", "adopt": 13.7, "over": false, "term": "1 year, 8 months, 21 days", "units": "BETB"}, {"product": "M365 Protection", "lic": "80.70 TB", "con": "104.31 TB", "adopt": 129.2, "over": true, "term": "3 months, 9 days", "units": "DPC"}, {"product": "M365 Protection", "lic": "2400.0", "con": "2398.0", "adopt": 99.9, "over": false, "term": "3 months, 9 days", "units": "USERS"}, {"product": "Rubrik Cloud Vault Backup tier Single Zone", "lic": "700.00 TB", "con": "576.80 TB", "adopt": 82.4, "over": false, "term": "3 months, 9 days", "units": "BETB"}, {"product": "Rubrik Appliance", "lic": "600.00 TB", "con": "136.80 TB", "adopt": 22.8, "over": false, "term": "1 year, 7 months, 11 days", "units": "BETB"}]};
+const ENT = [{"fam": "Hardware Support", "pillar": "core", "total": "15 appliances", "skus": 15, "next": "Jul 2026", "items": [{"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jul 28, 2026", "asset": "RH-6410S-01"}, {"desc": "Support for R6000S-3 hardware", "sku": "RS-HW-SVC-PE-S3", "qty": 1, "unit": "appliances", "end": "Jul 28, 2026", "asset": "RH-6412S-01"}, {"desc": "Support for Rubrik hardware", "sku": "RS-HW-SVC-PE-E1", "qty": 1, "unit": "appliances", "end": "Jul 28, 2026", "asset": "RH-E1112S"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 22, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Premium Support for hardware", "sku": "RBK-SVC-PREM-HW", "qty": 1, "unit": "appliances", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Oct 19, 2026", "asset": "RHA-6408S-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-6410S-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-6404S-01"}, {"desc": "Support for R6000S-2 hardware", "sku": "RS-HW-SVC-PE-S2", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-6404S-01"}, {"desc": "Support for Rubrik hardware", "sku": "RS-HW-SVC-PE-E1", "qty": 1, "unit": "appliances", "end": "Jan 30, 2028", "asset": "RH-E1112S"}]}, {"fam": "Legacy Rubrik Go", "pillar": "core", "total": "7 subs", "skus": 7, "next": "Sep 2026", "items": [{"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 22, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}, {"desc": "One (1) month of Rubrik Go Business Edition for r6408", "sku": "RBK-GO-BE-R6408", "qty": 1, "unit": "subs", "end": "Sep 25, 2026", "asset": "RBK-R6408S-HW-01"}]}, {"fam": "Edge Foundation Edition", "pillar": "core", "total": "120 BETB", "skus": 4, "next": "Oct 2026", "items": [{"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 50, "unit": "BETB", "end": "Oct 15, 2026", "asset": null}, {"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 50, "unit": "BETB", "end": "Mar 28, 2027", "asset": null}, {"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 10, "unit": "BETB", "end": "Apr 18, 2027", "asset": null}, {"desc": "Rubrik Edge Foundation Edition", "sku": "RS-BT-EDG-PE-PP", "qty": 10, "unit": "BETB", "end": "Mar 10, 2028", "asset": null}]}, {"fam": "Business Edition", "pillar": "core", "total": "120 BETB", "skus": 2, "next": "Oct 2026", "items": [{"desc": "Rubrik Business Edition", "sku": "RS-BT-BE-PE-PP", "qty": 60, "unit": "BETB", "end": "Oct 19, 2026", "asset": null}, {"desc": "Rubrik Business Edition", "sku": "RS-BT-BE-PE-PP", "qty": 60, "unit": "BETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "Cloud Vault (Backup Tier)", "pillar": "cloud", "total": "700 BETB", "skus": 2, "next": "Jul 2026", "items": [{"desc": "Rubrik Cloud Vault in Azure and AWS - Backup Tier Sing\u2026", "sku": "RS-BT-CVB-PE-PP", "qty": 100, "unit": "BETB", "end": "Jul 31, 2026", "asset": null}, {"desc": "Rubrik Cloud Vault in Azure and AWS - Backup Tier Sing\u2026", "sku": "RS-BT-CVB-PE-PP", "qty": 600, "unit": "BETB", "end": "Sep 30, 2026", "asset": null}]}, {"fam": "Foundation Edition \u00b7 E1000 ROBO", "pillar": "core", "total": "24 BETB", "skus": 2, "next": "Jul 2026", "items": [{"desc": "Rubrik for Remote and Branch Office Appliance", "sku": "RS-BT-FE-E1K-PE-PP", "qty": 12, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}, {"desc": "Rubrik for Remote and Branch Office Appliance", "sku": "RS-BT-FE-E1K-PE-PP", "qty": 12, "unit": "BETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "M365 Data Security (EE)", "pillar": "cloud", "total": "2,400 M365 users", "skus": 2, "next": "Sep 2026", "items": [{"desc": "One (1) month of Rubrik Data Security as a Service Ent\u2026", "sku": "RS-UR-EE-MD-PE-PP", "qty": 1310, "unit": "M365 users", "end": "Sep 30, 2026", "asset": null}, {"desc": "One (1) month of Rubrik Data Security as a Service Ent\u2026", "sku": "RS-UR-EE-MD-PE-PP", "qty": 1090, "unit": "M365 users", "end": "Sep 30, 2026", "asset": null}]}, {"fam": "Ransomware Investigation", "pillar": "cyber", "total": "165 BETB + 12 FETB", "skus": 2, "next": "Jul 2026", "items": [{"desc": "Rubrik Ransomware Investigation", "sku": "RS-BT-RAD-PE-PP", "qty": 165, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}, {"desc": "Rubrik Ransomware Investigation", "sku": "RS-FT-RAD-PE-PP", "qty": 12, "unit": "FETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "Cloud Edition", "pillar": "cloud", "total": "10 BETB", "skus": 1, "next": "Jul 2026", "items": [{"desc": "Rubrik Cloud Edition", "sku": "RS-BT-CLE-PE-PP", "qty": 10, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}]}, {"fam": "Enterprise Edition", "pillar": "cyber", "total": "75 BETB", "skus": 1, "next": "Jan 2028", "items": [{"desc": "Rubrik Enterprise Edition", "sku": "RS-BT-EE-PE-PP", "qty": 75, "unit": "BETB", "end": "Jan 30, 2028", "asset": null}]}, {"fam": "Enterprise Edition Add-on", "pillar": "cyber", "total": "165 license", "skus": 1, "next": "Aug 2026", "items": [{"desc": "Enterprise Edition Add-on for Foundation", "sku": "RS-BT-FUE-PE-PP", "qty": 165, "unit": "license", "end": "Aug 14, 2026", "asset": null}]}, {"fam": "Foundation Edition", "pillar": "core", "total": "165 BETB", "skus": 1, "next": "Jul 2026", "items": [{"desc": "Rubrik Foundation Edition", "sku": "RS-BT-FE-PE-PP", "qty": 165, "unit": "BETB", "end": "Jul 28, 2026", "asset": null}]}, {"fam": "SAP HANA (Cloud)", "pillar": "core", "total": "5 FETB", "skus": 1, "next": "Aug 2026", "items": [{"desc": "Rubrik for SAP HANA - Cloud", "sku": "RS-FT-SPH-PE-PP", "qty": 5, "unit": "FETB", "end": "Aug 14, 2026", "asset": null}]}];
+const WAVES = [{"label": "Fall 2026", "window": "Jul \u2013 Oct 2026", "items": 30, "tone": "hot", "dates": ["Jul 28", "Jul 31", "Aug 14", "Sep 22", "Sep 25", "Sep 30", "Oct 15", "Oct 19"], "summary": "The bulk of the estate renews here \u2014 ~1,160 BETB of capacity editions, 2,400 M365 users and 700 BETB of Cloud Vault, plus 13 legacy hardware-support and Rubrik Go lines on the older R6408.", "highlights": ["Foundation 165 BETB + EE Add-on 165 (Jul\u2013Aug)", "Cloud Vault 700 BETB (Jul + Sep)", "M365 Data Security 2,400 users (Sep)", "Business 60 BETB + Edge 50 BETB (Oct)"]}, {"label": "2027", "window": "Mar \u2013 Apr 2027", "items": 2, "tone": "warm", "dates": ["Mar 28", "Apr 18"], "summary": "A small Edge follow-on wave \u2014 60 BETB of Edge Foundation Edition across two lines.", "highlights": ["Edge Foundation Edition 50 BETB (Mar)", "Edge Foundation Edition 10 BETB (Apr)"]}, {"label": "2028", "window": "Jan \u2013 Mar 2028", "items": 9, "tone": "cool", "dates": ["Jan 30", "Mar 10"], "summary": "The newer multi-year block \u2014 Enterprise Edition, Business Edition, ROBO and Ransomware Investigation, plus four hardware-support lines.", "highlights": ["Enterprise 75 BETB + Business 60 BETB", "E1000 ROBO 12 BETB + Ransomware Inv 12 FETB", "Edge 10 BETB (Mar) + 4 hardware-support lines"]}];
+const WC={hot:'var(--red)',warm:'var(--yellow)',cool:'var(--cyan)'};
+
+const akpis=[
+ {n:SUPPORT.openCases,l:'Open support cases',cls:SUPPORT.openCases?'warn':'ok'},
+ {n:SUPPORT.p1,l:'P1 cases',cls:SUPPORT.p1?'bad':'ok'},
+ {n:SUPPORT.jiras,l:'Engineering Jiras open',cls:'ok'},
+ {n:SUPPORT.clusters,l:'Clusters in fleet',cls:''},
+ {n:SUPPORT.usedTotal+' TB',l:'Protected (used)',cls:''},
+ {n:SUPPORT.fleetVer,l:'CDM fleet version',cls:'warn'}
+];
+document.getElementById('akpis').innerHTML=akpis.map(k=>`<div class="akpi"><div class="n ${k.cls}">${k.n}</div><div class="l">${k.l}</div></div>`).join('');
+document.getElementById('case-mini').textContent='CEM owner: '+SUPPORT.cem;
+document.getElementById('cases').innerHTML=SUPPORT.cases.map(c=>`<div class="case"><span class="badge ${c.pri}">${c.pri}</span><div class="body"><div class="subj">${c.subj}</div><div class="meta">Case ${c.num} · ${c.status} · ${c.owner}</div></div></div>`).join('');
+
+function band(p){return p>=80?'bad':p>=70?'warn':''}
+const capsAll=SUPPORT.caps.filter(c=>c.pct!=null);
+document.getElementById('cap-mini').textContent=`${capsAll.length} reporting · all on CDM ${SUPPORT.fleetVer}`;
+function capRow(c){const b=band(c.pct);const col=b==='bad'?'var(--red)':b==='warn'?'var(--yellow)':'#9fb4c8';
+ return `<div class="crow"><span class="cn">${c.name}</span><span class="cp">${c.plat} · ${c.nodes}n</span><div class="bar"><i class="${b}" style="width:${Math.min(c.pct,100)}%"></i></div><span class="pct" style="color:${col}">${c.pct}%</span></div>`}
+const capsTop=capsAll.slice(0,6), rest=capsAll.slice(6);
+document.getElementById('caps').innerHTML=capsTop.map(capRow).join('')+`<div id="caprest" class="hidden">${rest.map(capRow).join('')}</div>`+(rest.length?`<button class="morebtn" id="capmore">+ show ${rest.length} more clusters</button>`:'');
+if(rest.length){document.getElementById('capmore').onclick=function(){const r=document.getElementById('caprest');const hid=r.classList.toggle('hidden');this.textContent=hid?`+ show ${rest.length} more clusters`:'– show fewer';};}
+
+document.getElementById('usage').innerHTML='<thead><tr><th>Product</th><th>Licensed</th><th>Consumed</th><th>Adoption</th><th>Term remaining</th></tr></thead><tbody>'+
+ SUPPORT.usage.map(u=>{const ac=u.adopt>100?'var(--red)':u.adopt>=90?'var(--yellow)':'#cfe0f0';
+  return `<tr><td>${u.product} <span style="color:var(--gray);font-size:.7rem">(${u.units})</span>${u.over?'<span class="tagover">OVERAGE</span>':''}</td><td class="r">${u.lic}</td><td class="r">${u.con}</td><td class="r" style="color:${ac}">${u.adopt!=null?u.adopt+'%':'—'}</td><td class="r" style="font-size:.72rem;color:#9fb4c8">${u.term||'—'}</td></tr>`}).join('')+'</tbody>';
+
+document.getElementById('waves').innerHTML=WAVES.map(w=>`<div class="wave" style="--wc:${WC[w.tone]}"><div class="wlabel">${w.label}</div><div class="wwin">${w.window}</div><div class="witems">${w.items} entitlement lines renew</div><div class="wsum">${w.summary}</div><div class="wdates">${w.dates.map(d=>`<span>${d}</span>`).join('')}</div></div>`).join('');
+
+const ef=document.getElementById('efams');
+ENT.forEach(f=>{
+  const c=PILLARS[f.pillar].c;
+  const el=document.createElement('div'); el.className='efam'; el.dataset.p=f.pillar; el.style.setProperty('--c',c);
+  el.innerHTML=`<div class="ehead"><span class="ename">${f.fam}</span><span class="etot">${f.total}</span><span class="emeta">${f.skus} line${f.skus>1?'s':''} · next ${f.next}</span><span class="echev">▸</span></div>
+   <div class="edetail">${f.items.map(i=>`<div class="eitem"><div class="ed">${i.desc}<small>${i.sku}${i.asset?' · '+i.asset:''}</small></div><div class="eq">${i.qty.toLocaleString()} ${i.unit}</div><div class="ee">${i.end}</div></div>`).join('')}</div>`;
+  el.querySelector('.ehead').addEventListener('click',()=>el.classList.toggle('open'));
+  ef.appendChild(el);
+});
+
+// ===== Section navigation =====
+const navbtns=document.querySelectorAll('.navbtn');
+function showSection(sec){
+  document.querySelectorAll('.mainsec').forEach(s=>s.classList.toggle('show', s.id==='sec-'+sec));
+  navbtns.forEach(b=>{const on=b.dataset.sec===sec; b.classList.toggle('active',on); b.setAttribute('aria-selected', on?'true':'false');});
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+navbtns.forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.sec)));
+
+// Scroll reveal (graceful fallback if IntersectionObserver is unavailable)
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('show'); io.unobserve(en.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.ev').forEach(el=>io.observe(el));
+}else{
+  document.querySelectorAll('.ev').forEach(el=>el.classList.add('show'));
+}
+</script>
+</body>
+</html>
